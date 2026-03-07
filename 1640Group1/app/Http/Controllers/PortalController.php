@@ -14,6 +14,6 @@ class PortalController extends Controller
         return view("portal.forgotPassword");
     }
     public function newPassword(){
-        return view("portal.newPassword");
+        return view("portal.resetPassword");
     }
 }

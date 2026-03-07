@@ -16,8 +16,8 @@
                     Accounts
                 </li>
                 <li class="sidebar-item">
-                    <a href="{{ route('admin-userManagement') }}" class="sidebar-link">Manage user account</a>
-                    <a href="{{ route('admin-newUser') }}" class="sidebar-link">Create new user account</a>
+                    <a href="{{ route('admin.userManagement') }}" class="sidebar-link">Manage user account</a>
+                    <a href="{{ route('admin.newUser') }}" class="sidebar-link">Create new user account</a>
                 </li>
             </ul>
 

@@ -9,6 +9,18 @@ Route::get('/',[PortalController::class,'login'])->name('login');
 Route::get('/forgotPassword',[PortalController::class,'forgotPassword'])->name('forgotPassword');
 Route::get('/newPassword',[PortalController::class,'newPassword'])->name('newPassword');
 
-Route::get('/admin/home', [AdminController::class,'home'])->name('admin-home');
-Route::get('/admin/newUser', [AdminController::class,'newUser'])->name('admin-newUser');
-Route::get('/admin/userManangement', [AdminController::class,'userManagement'])->name('admin-userManagement');
+Route::get('/admin/home', [AdminController::class,'home'])->name('admin.home');
+Route::get('/admin/newUser', [AdminController::class,'newUser'])->name('admin.newUser');
+Route::get('/admin/userManangement', [AdminController::class,'userManagement'])->name('admin.userManagement');
+
+// Route::middleware('guest')->group(function (){
+//     Route::View('/', 'portal.login')->name('login.show');
+//     Route::post('/', [PortalController::class, 'login'])->name('login');
+
+//     Route::View('/forgotPassword', 'portal.forgotPassword')->name('password.request');
+//     Route::post('/forgotPassword', [PortalController::class, 'sendLink'])->name('password.email');
+
+//     Route::get('/resetPassword/{token}', [PortalController::class, 'showResetPassword'])->name('password.reset');
+//     Route::post('/resetPassword', [PortalController::class, 'resetPassword'])->name('password.update');
+
+// });
