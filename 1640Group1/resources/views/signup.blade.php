@@ -66,9 +66,9 @@
             <div class="form-group">
                 <label>Choose role</label>
                 <select name="role" class="{{ $errors->has('role') ? 'input-error' : '' }}">
-                    <option value="staff" {{ old('role') == 'staff' ? 'selected' : '' }}>Staff</option>
-                    <option value="qa_coordinator" {{ old('role') == 'qa_coordinator' ? 'selected' : '' }}>QA Coordinator</option>
-                    <option value="qa_management" {{ old('role') == 'qa_management' ? 'selected' : '' }}>QA Management</option>
+                    <option value="Staff" {{ old('role') == 'Staff' ? 'selected' : '' }}>Staff</option>
+                    <option value="QACoordinator" {{ old('role') == 'QACoordinator' ? 'selected' : '' }}>QA Coordinator</option>
+                    <option value="QAManagement" {{ old('role') == 'QAManagement' ? 'selected' : '' }}>QA Management</option>
                 </select>
                 @error('role')
                     <span class="error-message">{{ $message }}</span>

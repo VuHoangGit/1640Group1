@@ -9,21 +9,23 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('userId');
-            $table->string('username')->unique;
-            $table->string('fullName');
-            $table->string('email')->unique;
+            $table->string('username')->unique(); // Sửa lỗi: Thêm cặp ngoặc ()
+            $table->string('fullName')->nullable(); // Cho phép rỗng vì form không nhập
+            $table->string('phone'); // THÊM MỚI: Cột số điện thoại
+            $table->string('email')->unique(); // Sửa lỗi: Thêm cặp ngoặc ()
             $table->timestamp('email_verified_at')->nullable();
             $table->string('passwordHash');
             $table->string('role');
-            $table->boolean('acceptTerms');
-            $table->boolean('isActive');
+            $table->boolean('acceptTerms')->default(false); // Thêm giá trị mặc định
+            $table->boolean('isActive')->default(true); // Thêm giá trị mặc định (tài khoản mới mặc định được kích hoạt)
             $table->rememberToken();
             $table->timestamps();
         });
+
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();

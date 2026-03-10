@@ -12,15 +12,23 @@ class User extends Authenticatable implements MustVerifyEmail
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
+    // 1. Báo cho Laravel biết khóa chính của bảng là 'userId' (thay vì 'id' mặc định)
+    protected $primaryKey = 'userId';
+
+    /** * The attributes that are mass assignable.
      *
      * @var list<string>
      */
+    // 2. Mở khóa cho phép lưu dữ liệu vào các cột tùy chỉnh
     protected $fillable = [
-        'name',
+        'username',
+        'fullName',
+        'phone',
         'email',
-        'password',
+        'passwordHash',
+        'role',
+        'acceptTerms',
+        'isActive',
     ];
 
     /**
@@ -28,8 +36,9 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var list<string>
      */
+    // 3. Ẩn cột 'passwordHash' khi truy xuất dữ liệu người dùng (để bảo mật)
     protected $hidden = [
-        'password',
+        'passwordHash',
         'remember_token',
     ];
 
@@ -42,7 +51,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'passwordHash' => 'hashed', // Tự động mã hóa Hash cho cột passwordHash
+            'acceptTerms' => 'boolean',
+            'isActive' => 'boolean',
         ];
+    }
+
+    // 4. Hàm BẮT BUỘC: Giúp chức năng Đăng nhập của Laravel tìm đúng cột mật khẩu
+    public function getAuthPassword()
+    {
+        return $this->passwordHash;
     }
 }

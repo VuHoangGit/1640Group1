@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User; // Gọi Model User
+use Illuminate\Support\Facades\Hash; // Gọi thư viện mã hóa mật khẩu
 
 class AuthController extends Controller
 {
@@ -11,23 +13,28 @@ class AuthController extends Controller
         return view('signup');
     }
 
-    public function register(Request $request)
+public function register(Request $request)
     {
-    // 1. Khai báo các quy tắc kiểm tra dữ liệu
+        // 1. Kiểm tra dữ liệu (Validation)
         $validatedData = $request->validate([
-            // Thêm min:3 để bắt buộc tên người dùng có ít nhất 3 ký tự
             'username' => 'required|string|min:3|max:255',
-
-            // Đổi nullable thành required để bắt buộc phải nhập số điện thoại
             'phone'    => 'required|string|max:15',
-
-            'email'    => 'required|email',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
-            'role'     => 'required|in:staff,qa_coordinator,qa_management'
+            'role'     => 'required|in:Staff,QACoordinator,QAManagement'
         ]);
 
-        // 2. Nếu dữ liệu VƯỢT QUA bài kiểm tra, code mới chạy xuống dòng này.
-        // Tạm thời in ra màn hình để báo thành công.
-        dd("Dữ liệu chuẩn xác! Đã sẵn sàng lưu vào Database: ", $validatedData);
+        // 2. Lưu vào Database
+        User::create([
+            'username'     => $validatedData['username'],
+            'phone'        => $validatedData['phone'],
+            'email'        => $validatedData['email'],
+            'passwordHash' => Hash::make($validatedData['password']),
+            'role'         => $validatedData['role'],
+        ]);
+
+            // 3. TỰ ĐỘNG CHUYỂN HƯỚNG VỀ TRANG LOGIN
+            // Hàm with() giúp mang theo một lời nhắn ngầm để hiển thị bên trang đăng nhập
+            return redirect()->route('login')->with('success', 'Đăng ký tài khoản thành công! Vui lòng đăng nhập.');
+        }
     }
-}
