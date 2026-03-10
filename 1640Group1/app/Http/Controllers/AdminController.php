@@ -15,4 +15,7 @@ class AdminController
     public function userManagement() {
         return view("admin.userManagement");
     }
+    public function dashboard(){
+        return view("admin.dashboard");
+    }
 }

@@ -104,40 +104,7 @@
                 <p class="text-muted">Academic Portal Homepage</p>
             </div>
 
-            <div class="menu-list">
-                <a href="{{ route('admin.userManagement') }}" class="home-menu-item">
-                    <i class="bi bi-people"></i>
-                    <div>
-                        <div class="fw-bold">Manage Accounts</div>
-                        <div class="small text-muted">View and edit user permissions</div>
-                    </div>
-                </a>
 
-                <a href="{{ route('admin.newUser') }}" class="home-menu-item">
-                    <i class="bi bi-person-plus"></i>
-                    <div>
-                        <div class="fw-bold">Create New User</div>
-                        <div class="small text-muted">Add a new student or staff member</div>
-                    </div>
-                </a>
-
-                <a href="{{ route('admin.dashboard') }}" class="home-menu-item">
-                    <i class="bi bi-gear"></i>
-                    <div>
-                        <div class="fw-bold">Dashboard</div>
-                        <div class="small text-muted">Configure portal parameters</div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="text-center">
-                <a href="{{ route('login') }}" class="btn-logout d-inline-block">
-                    <i class="bi bi-box-arrow-left"></i> Logout System
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

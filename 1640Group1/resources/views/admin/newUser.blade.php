@@ -108,21 +108,21 @@
 <div class="login-container">
     <div class="row g-0">
         <div class="col-md-6 login-sidebar d-none d-md-flex">
-            <a href="/home" class="back-button" title="Back to Dashboard">‹</a>
+            <a href="{{ Route('admin.home') }}" class="back-button" title="Back to Dashboard">‹</a>
             <img src="https://cdni.iconscout.com/illustration/premium/thumb/adding-user-illustration-download-in-svg-png-gif-formats--new-registration-add-man-person-avatar-business-pack-illustrations-5063116.png" alt="Add User Illustration" class="illustration">
         </div>
 
         <div class="col-md-6 login-form-section">
             <div class="university-url">🌐 Admin Panel</div>
-            
+
             <div class="mb-4">
                 <h3 class="fw-bold mb-1">Add new account</h3>
                 <p class="text-muted small">Create a new student or staff profile in the system.</p>
             </div>
 
-            <form action="{{ route('users.store') }}" method="POST">
+            <form action="" method="POST">
                 @csrf
-                
+
                 <div class="mb-2">
                     <label>Email Address</label>
                     <input type="email" name="email" class="form-control" placeholder="example@university.edu" required>
@@ -144,7 +144,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 btn-create">Create Account</button>
-                
+
                 <div class="text-center mt-3">
                     <a href="/home" class="text-decoration-none text-muted small">Cancel and go back</a>
                 </div>

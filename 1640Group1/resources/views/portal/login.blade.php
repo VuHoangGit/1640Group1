@@ -114,7 +114,7 @@
 
         <div class="col-md-6 login-form-section">
             <div class="university-url">🌐 www.universityname.ac.in</div>
-            
+
             <div class="text-center">
                 <img src="https://cdn-icons-png.flaticon.com/512/3449/3449692.png" alt="Logo" class="university-logo">
                 <h4 class="fw-bold mb-1">UNIVERSITY NAME</h4>
@@ -122,15 +122,21 @@
             </div>
 
             <form method="POST" action="{{ route('login') }}">
+                {{-- @if(Session::has('success'))
+                <div class="alert alert-success">{{ Session::get('success') }}</div>
+                @endif()
+                @if(Session::has('success'))
+                <div class="alert alert-danger">{{ Session::get('fail') }}</div>
+                @endif() --}}
                 @csrf
                 <div class="mb-4">
                     <label class="text-muted small">Enrollment number</label>
-                    <input type="text" name="email" class="form-control" placeholder="Enter Enrollment number" required>
+                    <input type="text" name="email" class="form-control" placeholder="" required>
                 </div>
 
                 <div class="mb-3 position-relative">
                     <label class="text-muted small">Password</label>
-                    <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                    <input type="password" name="password" class="form-control" placeholder="" required>
                 </div>
 
                 <div class="footer-links">

@@ -1,7 +1,9 @@
 <?php
 
+use Illuminate\Container\Attributes\DB;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -13,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('userId');
-            $table->string('username')->unique;
-            $table->string('fullName');
+            // $table->string('username')->unique;
+            // $table->string('fullName');
             $table->string('email')->unique;
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('passwordHash');
+            // $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
             $table->string('role');
             $table->boolean('acceptTerms');
-            $table->boolean('isActive');
+            // $table->boolean('isActive');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -39,6 +41,8 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+        // Schema::insert('insert into users (email, passwordHash, role, acceptTerms) values (?, ?, ?, ?)', ['admin@gmail.com', Hash::make('admin'), 'admin', true]);
+        // Schema::insert('insert into users (email, passwordHash, role, acceptTerms) values (?, ?, ?, ?)', ['staff1@gmail.com', Hash::make('staff'), 'staff', true]);
     }
 
     /**
