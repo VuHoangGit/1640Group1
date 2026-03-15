@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Idea;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -34,7 +35,20 @@ class AdminController
         return view("admin.userManagement");
     }
     public function dashboard(){
-        return view("admin.dashboard");
+        // 1. Đếm số lượng Idea theo từng Category
+        $ideasByCategory = \App\Models\Idea::join('categories', 'ideas.categoryId', '=', 'categories.categoryId')
+            ->select('categories.name', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+            ->groupBy('categories.categoryId', 'categories.name')
+            ->get();
+
+        // 2. Đếm số lượng Idea theo từng Staff
+        $ideasByStaff = \App\Models\Idea::join('users', 'ideas.userId', '=', 'users.userId')
+            ->select('users.username', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+            ->groupBy('users.userId', 'users.username')
+            ->get();
+
+        // 3. Truyền 2 biến dữ liệu này sang file giao diện
+        return view("admin.dashboard", compact('ideasByCategory', 'ideasByStaff'));
     }
     public function socialmedia()
     {
@@ -43,5 +57,12 @@ class AdminController
     public function staffmanagement()
     {
         return view('admin.staffmanagement');
+    }
+
+    public function ideaList()
+    {
+    // Lấy danh sách bài đăng, kèm theo thông tin User và Category
+    $ideas = Idea::with(['user', 'category'])->orderBy('created_at', 'desc')->get();
+    return view('admin.ideaList', compact('ideas'));
     }
 }

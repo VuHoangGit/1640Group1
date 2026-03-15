@@ -186,6 +186,57 @@
                 </div>
             </div>
         </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <h5 class="fw-bold mb-4">Submit New Idea</h5>
+                <div class="bg-white p-4 rounded-4 shadow-sm">
+
+                    @if (session('success'))
+                        <div class="alert alert-success fw-bold">
+                            <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('idea.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Category</label>
+                            <select name="category_id" class="form-select" required>
+                                <option value="" disabled selected>-- Select a category --</option>
+                                <option value="1">Math</option>
+                                <option value="2">History</option>
+                                <option value="3">English</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Choose your file</label>
+                            <input class="form-control" type="file" name="document" accept=".doc,.docx,.pdf" required>
+                            <div class="form-text text-muted">
+                                <i class="bi bi-info-circle"></i> Accepted formats: Word (.doc, .docx) or PDF. Max size: 10MB.
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary px-4 fw-bold">
+                            <i class="bi bi-cloud-arrow-up-fill me-2"></i> Submit Idea
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
