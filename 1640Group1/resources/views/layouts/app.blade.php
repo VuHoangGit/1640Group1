@@ -145,29 +145,25 @@ margin-top:15px;
 </div>
 
 <!-- Main Content -->
-
 <div class="main-content">
 
-<!-- top profile -->
+    <!-- top profile -->
+    <div class="top-bar">
 
-<div class="top-bar">
+        <div class="text-end me-2">
+            <p class="mb-0 fw-bold small">John Doe</p>
+            <small class="text-muted">Student ID: 2024001</small>
+        </div>
 
-<div class="text-end me-2">
-<p class="mb-0 fw-bold small">John Doe</p>
-<small class="text-muted">Student ID: 2024001</small>
-</div>
+        <img src="https://i.pravatar.cc/150?u=john" class="profile-img">
 
-<img src="https://i.pravatar.cc/150?u=john" class="profile-img">
-
-</div>
-
-
-<div class="row g-4">
-
-    <div class="main-content">
-        @yield('content')
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @yield('content')
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
