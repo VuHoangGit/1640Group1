@@ -4,7 +4,7 @@
 
 <div class="container-fluid">
 
-    <h2 class="text-center fw-bold mb-4">Social media management</h2>
+    <h2 class="text-center fw-bold mb-4">Social Media Management</h2>
 
     <div class="card shadow-sm border-0">
         <div class="card-body">
@@ -22,31 +22,7 @@
                 </thead>
 
                 <tbody>
-
-                    <tr>
-                        <td>1</td>
-                        <td>Math Study Tips</td>
-                        <td>John</td>
-                        <td>15</td>
-                        <td>2</td>
-                    </tr>
-
-                    <tr>
-                        <td>2</td>
-                        <td>History Timeline</td>
-                        <td>Anna</td>
-                        <td>10</td>
-                        <td>1</td>
-                    </tr>
-
-                    <tr>
-                        <td>3</td>
-                        <td>English Grammar</td>
-                        <td>Mike</td>
-                        <td>18</td>
-                        <td>3</td>
-                    </tr>
-
+                    <!-- Data will be loaded from database -->
                 </tbody>
 
             </table>
