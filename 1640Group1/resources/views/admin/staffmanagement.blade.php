@@ -28,27 +28,27 @@
                 <tbody>
 
                     <tr>
-                        <td>1</td>
-                        <td>John Doe</td>
-                        <td>Admin</td>
-                        <td>john@example.com</td>
-                        <td>******</td>
-                        <td>Pet name?</td>
-                        <td>Mother name?</td>
-                        <td>Birth city?</td>
-                        <td>0123456789</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
 
                     <tr>
-                        <td>2</td>
-                        <td>Anna Smith</td>
-                        <td>Staff</td>
-                        <td>anna@example.com</td>
-                        <td>******</td>
-                        <td>First school?</td>
-                        <td>Best friend?</td>
-                        <td>Favorite teacher?</td>
-                        <td>0987654321</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
 
                 </tbody>
