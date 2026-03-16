@@ -79,6 +79,15 @@
             color: #2b99d6;
         }
 
+        /* Màu riêng cho nút Ideas để làm nổi bật */
+        .item-ideas i {
+            color: #1cc88a;
+        }
+        .item-ideas:hover {
+            border-color: #1cc88a;
+            color: #1cc88a;
+        }
+
         .btn-logout {
             margin-top: 20px;
             color: #dc3545;
@@ -97,9 +106,9 @@
         </div>
 
         <div class="col-md-6 login-form-section">
-            <div class="university-url">🌐 Dashboard v1.0</div>
+            <div class="university-url">🌐 Dashboard v1.1</div>
 
-            <div class="mb-5">
+            <div class="mb-4">
                 <h3 class="fw-bold mb-1">Welcome back!</h3>
                 <p class="text-muted">Academic Portal Homepage</p>
             </div>
@@ -121,11 +130,19 @@
                     </div>
                 </a>
 
-                <a href="{{ route('admin.dashboard') }}" class="home-menu-item">
-                    <i class="bi bi-gear"></i>
+                <a href="{{ route('admin.ideas') }}" class="home-menu-item item-ideas">
+                    <i class="bi bi-folder-check"></i>
                     <div>
-                        <div class="fw-bold">Dashboard</div>
-                        <div class="small text-muted">Configure portal parameters</div>
+                        <div class="fw-bold">Manage Submitted Ideas</div>
+                        <div class="small text-muted">Download and review staff documents</div>
+                    </div>
+                </a>
+
+                <a href="{{ route('admin.dashboard') }}" class="home-menu-item">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    <div>
+                        <div class="fw-bold">Visual Dashboard</div>
+                        <div class="small text-muted">View statistics and analytics</div>
                     </div>
                 </a>
             </div>

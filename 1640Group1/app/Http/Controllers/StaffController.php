@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Idea;
 
 class StaffController extends Controller
 {
@@ -32,5 +33,26 @@ class StaffController extends Controller
             'acceptTerms' => true
         ]);
         return redirect('/staff/home');
+    }
+    public function storeIdea(Request $request)
+    {
+        // 1. Kiểm tra dữ liệu và file (Tối đa 10MB, đuôi doc, docx, pdf)
+        $request->validate([
+            'category_id' => 'required|exists:categories,categoryId',
+            'document'    => 'required|file|mimes:doc,docx,pdf|max:10240',
+        ]);
+
+        // 2. Cất file thực tế vào thư mục: storage/app/public/ideas
+        $path = $request->file('document')->store('ideas', 'public');
+
+        // 3. Lưu thông tin (đường dẫn file, người đăng, chuyên mục) vào Database
+        Idea::create([
+            'userId'     => auth()->id(), // Tự động lấy ID của người đang đăng nhập
+            'categoryId' => $request->category_id,
+            'filePath'   => $path,
+        ]);
+
+        // 4. Báo thành công và tải lại trang
+        return redirect()->back()->with('success', 'Gửi ý tưởng và file thành công!');
     }
 }

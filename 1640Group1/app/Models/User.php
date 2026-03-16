@@ -9,33 +9,62 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    protected $primaryKey = 'userId';
     use HasFactory, Notifiable;
 
+    // 1. Khai báo khóa chính chính xác
+    protected $primaryKey = 'userId';
+
+    /**
+     * Các thuộc tính có thể lưu hàng loạt (Mass Assignable).
+     */
     protected $fillable = [
-        'name',
+        'username',
+        'fullName',
+        'phone',
         'email',
-        'password',
+        'passwordHash',
         'role',
         'acceptTerms',
+        'isActive',
+        // Bổ sung các cột bảo mật để lưu từ authSetup
         'favorite_animal',
         'favorite_color',
-        'child_birth_year'
+        'child_birth_year',
     ];
 
+    /**
+     * Các thuộc tính nên ẩn khi xuất dữ liệu (Serialization).
+     */
     protected $hidden = [
-        'password',
+        'passwordHash',
         'remember_token',
         'favorite_animal',
         'favorite_color',
         'child_birth_year',
     ];
 
+    /**
+     * Ép kiểu dữ liệu (Casts).
+     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'passwordHash' => 'hashed',
+            'acceptTerms' => 'boolean',
+            'isActive' => 'boolean',
         ];
+    }
+
+    // 2. Định nghĩa quan hệ: Một người dùng có thể có nhiều bài đăng (Ideas)
+    public function ideas()
+    {
+        return $this->hasMany(Idea::class, 'userId', 'userId');
+    }
+
+    // 3. Giúp chức năng Đăng nhập của Laravel tìm đúng cột mật khẩu thay vì cột 'password' mặc định
+    public function getAuthPassword()
+    {
+        return $this->passwordHash;
     }
 }
