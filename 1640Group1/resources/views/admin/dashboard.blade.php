@@ -8,14 +8,14 @@
     <div class="col-md-4">
         <div class="stat-card shadow-sm p-3 bg-white rounded">
             <canvas id="categoryChart"></canvas>
-            <p class="chart-title text-center mt-3 fw-bold">Biểu đồ category đã đăng</p>
+            <p class="chart-title text-center mt-3 fw-bold">Published category chart</p>
         </div>
     </div>
 
     <div class="col-md-8">
         <div class="stat-card shadow-sm p-3 bg-white rounded">
             <canvas id="staffChart"></canvas>
-            <p class="chart-title text-center mt-3 fw-bold">Biểu đồ số lượng Staff đăng bài</p>
+            <p class="chart-title text-center mt-3 fw-bold">Staff post count chart</p>
         </div>
     </div>
 </div>
@@ -67,7 +67,7 @@
             data: {
                 labels: staffLabels,
                 datasets: [{
-                    label: 'Số lượng bài đăng',
+                    label: 'Number of posts',
                     data: staffData,
                     backgroundColor: '#2b99d6'
                 }]

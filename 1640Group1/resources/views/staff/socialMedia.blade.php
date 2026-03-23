@@ -1,14 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+.idea-card {
+    max-width: 500px;
+    margin: auto;
+    border-radius: 20px;
+}
+
+.idea-card .card-body {
+    min-height: 300px;
+}
+</style>
 <div class="container-fluid">
     <h3 class="fw-bold mb-4"><i class="bi bi-globe2"></i> Social Media List</h3>
 
-    <div class="row">
-        <div class="col-md-9 mx-auto">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
             @forelse($ideas as $idea)
-                <div class="card border-0 shadow-sm mb-4 rounded-3">
-                    <div class="card-body p-4">
+                <div class="card border-0 shadow-sm mb-4 rounded-4 idea-card">
+                    <div class="card-body p-4 text-center">
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
@@ -37,20 +48,20 @@
                         <div class="mb-3">
                             @if($isVoteClosed)
                                 <span class="badge bg-danger mb-1 px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-lock-fill"></i> Voting Closed</span>
-                                <small class="text-muted d-block" style="font-size: 0.75rem;">Đã kết thúc lúc {{ $deadline->format('H:i - d/m/Y') }}</small>
+                                <small class="text-muted d-block" style="font-size: 0.75rem;">Ended at {{ $deadline->format('H:i - d/m/Y') }}</small>
                             @else
                                 <span class="badge bg-success mb-1 px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-unlock-fill"></i> Voting Open</span>
-                                <small class="text-muted d-block" style="font-size: 0.75rem;">Sẽ đóng vào Chủ Nhật ({{ $deadline->format('d/m/Y') }})</small>
+                                <small class="text-muted d-block" style="font-size: 0.75rem;">Closed on Sunday ({{ $deadline->format('d/m/Y') }})</small>
                             @endif
                         </div>
 
-                        <div class="d-flex gap-2">
-                            <button onclick="toggleReaction({{ $idea->ideaId }}, 'upvote', this)" class="btn {{ $myVote === true ? 'btn-primary' : 'btn-outline-secondary' }} px-3 rounded-pill btn-reaction" data-type="upvote" {{ $isVoteClosed ? 'disabled' : '' }}>
+                        <div class="d-flex justify-content-between mt-3">
+                            <button onclick="toggleReaction({{ $idea->ideaId }}, 'upvote', this)" class="btn {{ $myVote === true ? 'btn-primary' : 'btn-outline-secondary' }} w-50 me-2 rounded-pill btn-reaction" data-type="upvote" {{ $isVoteClosed ? 'disabled' : '' }}>
                                 <i class="bi {{ $myVote === true ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up' }} me-1"></i>
                                 <span class="vote-count">{{ $idea->upvotes }}</span>
                             </button>
 
-                            <button onclick="toggleReaction({{ $idea->ideaId }}, 'downvote', this)" class="btn {{ $myVote === false ? 'btn-danger' : 'btn-outline-secondary' }} px-3 rounded-pill btn-reaction" data-type="downvote" {{ $isVoteClosed ? 'disabled' : '' }}>
+                            <button onclick="toggleReaction({{ $idea->ideaId }}, 'downvote', this)" class="btn {{ $myVote === false ? 'btn-danger' : 'btn-outline-secondary' }} w-50 ms-2 rounded-pill btn-reaction" data-type="downvote" {{ $isVoteClosed ? 'disabled' : '' }}>
                                 <i class="bi {{ $myVote === false ? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down' }} me-1"></i>
                                 <span class="vote-count">{{ $idea->downvotes }}</span>
                             </button>
@@ -85,7 +96,7 @@
             if (!response.ok) {
                 let errData = await response.json();
                 // Báo lỗi bằng hộp thoại nếu cố tình can thiệp mã nguồn khi đã hết hạn
-                alert("🚫 " + (errData.message || "Đã xảy ra lỗi hệ thống!"));
+                alert("🚫 " + (errData.message || "A system error has occurred!"));
                 throw new Error("Lỗi API");
             }
             return response.json();

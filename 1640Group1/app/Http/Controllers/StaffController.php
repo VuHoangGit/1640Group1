@@ -123,7 +123,7 @@ class StaffController extends Controller
 
         // Nếu thời gian hiện tại đã vượt quá Deadline -> Báo lỗi chặn ngay lập tức
         if (now()->greaterThan($deadline)) {
-            return response()->json(['message' => 'Thời gian vote cho bài viết này đã kết thúc vào Chủ Nhật vừa qua!'], 403);
+            return response()->json(['message' => 'The voting period for this post ended last Sunday!'], 403);
         }
 
         $isUpvote = $request->action === 'upvote'; // true nếu bấm like, false nếu dislike

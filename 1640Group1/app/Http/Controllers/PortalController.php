@@ -49,10 +49,10 @@ class PortalController extends Controller
                 return redirect()->intended(route('staff.home'));
 
             } else {
-                return back()->withErrors(['password' => 'Mật khẩu không chính xác.'])->withInput();
+                return back()->withErrors(['password' => 'Incorrect password.'])->withInput();
             }
         } else {
-            return back()->withErrors(['email' => 'Email này chưa được đăng ký.'])->withInput();
+            return back()->withErrors(['email' => 'This email is not registered.'])->withInput();
         }
     }
 
@@ -79,7 +79,7 @@ class PortalController extends Controller
         $user = User::where('email','=',$request->email)->first();
 
         if(!$user){
-            return back()->with('error','Không tìm thấy email');
+            return back()->with('error','Email not found');
         }
 
         // So sánh câu trả lời (xóa khoảng trắng thừa)
@@ -89,12 +89,12 @@ class PortalController extends Controller
             return redirect(route('newPassword'));
         }
 
-        return back()->with('error','Câu trả lời bảo mật không đúng');
+        return back()->with('error','The security answer is incorrect.');
     }
 
     public function newPassword(){
         if(!session()->has('password_reset_user')){
-            return redirect()->route('forgotPassword')->with('error','Phiên reset đã hết hạn');
+            return redirect()->route('forgotPassword')->with('error','The reset session has expired.');
         }
         return view('portal.resetPassword');
     }
@@ -109,7 +109,7 @@ class PortalController extends Controller
         $user = User::find($userId);
 
         if(!$user){
-            return redirect()->route('forgotPassword')->with('error','Không tìm thấy người dùng');
+            return redirect()->route('forgotPassword')->with('error','User not found');
         }
 
         $user->passwordHash = Hash::make($request->newPassword);
@@ -117,6 +117,6 @@ class PortalController extends Controller
 
         session()->forget('password_reset_user');
 
-        return redirect()->route('loginPage')->with('success','Đổi mật khẩu thành công. Vui lòng đăng nhập lại.');
+        return redirect()->route('loginPage')->with('success','Password changed successfully. Please log in again.');
     }
 }

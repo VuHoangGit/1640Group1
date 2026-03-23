@@ -39,7 +39,7 @@ class AdminController extends Controller
         ]);
 
         // 3. Chuyển hướng kèm thông báo thành công
-        return redirect()->back()->with('success', 'Tạo tài khoản mới thành công!');
+        return redirect()->back()->with('success', 'New account created successfully!');
     }
 
     public function userManagement() {
