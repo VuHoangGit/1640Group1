@@ -67,7 +67,45 @@ class AdminController extends Controller
 
     public function staffmanagement()
     {
-        return view('admin.staffmanagement');
+        $users = User::all();
+        return view('admin.staffManagement', compact('users'));
+    }
+
+    public function deleteUser($userId){
+        $user = User::findOrFail($userId);
+        $user->delete();
+        return redirect()->back();
+    }
+    public function viewUpdateUser($userId){
+        $user = User::findOrFail($userId);
+        return view('admin.updateUser', compact('user'));
+    }
+
+    public function updateUser(Request $request, $userId){
+        $request->validate([
+            'username' => ['required', 'unique:users,username'],
+            'fullName' => ['required'],
+            'email'    => ['required','email','unique:users,email'],
+            'password' => ['max:20'],
+            'role'     => ['required','in:Staff,QACoordinator,QAManager']
+        ]);
+        $user = User::findOrFail($userId);
+        $user->username = $request->username;
+        $user->fullName = $request->fullName;
+        $user->email = $request->email;
+        $user->role = $request->role;
+        if ($request->password!= null){
+            $user->passwordHash = Hash::make($request->password);
+        }
+        if ($request->resetQuestion){
+            $user->favorite_animal = null;
+            $user->favorite_color = null;
+            $user->child_birth_year = null;
+        }
+
+        $user->save();
+
+        return redirect('/staffManagement');
     }
 
     // --- 1. ĐÃ CẬP NHẬT: Tích hợp đếm lượt Vote ---

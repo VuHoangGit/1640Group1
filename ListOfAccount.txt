@@ -3,7 +3,7 @@
 
 2. List of account
     Admin: 
-    - tk: admin@gmail.com - mk: admin
+    - tk: admin@test.com - mk: 123456
     Staff:
-    - tk: staff1@gmail.com - mk: staff
-    - tk: staff2@gmail.com - mk: staff2     (Recommended on using)
+    - tk: staff@test.com - mk: 123456       (No forgot password question)
+    - tk: staff2@gmail.com - mk: 123456     (Have forgot password question)

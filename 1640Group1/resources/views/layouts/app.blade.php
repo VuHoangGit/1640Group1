@@ -121,7 +121,7 @@
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
 
-                <a class="nav-link {{ request()->routeIs('admin.staffmanagement') ? 'active' : '' }}" href="{{ route('admin.staffmanagement') }}">
+                <a class="nav-link {{ request()->routeIs('admin.staffmanagement') ? 'active' : '' }}" href="{{ route('admin.staffManagement') }}">
                     <i class="bi bi-people"></i> Staff Management
                 </a>
 

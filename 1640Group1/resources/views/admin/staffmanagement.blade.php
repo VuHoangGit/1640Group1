@@ -6,6 +6,7 @@
 
     <h2 class="text-center fw-bold mb-4">Staff Management</h2>
 
+    <a href="{{ route('admin.newUser') }}">Create new User   </a>
     <div class="card shadow-sm border-0">
         <div class="card-body">
 
@@ -17,16 +18,42 @@
                         <th>Name</th>
                         <th>Role</th>
                         <th>Email</th>
-                        <th>Password</th>
+                        <th>Accept terms</th>
                         <th>Question 1</th>
                         <th>Question 2</th>
                         <th>Question 3</th>
-                        <th>Phone Number</th>
+                        <th>Options</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <!-- Data will be loaded from database -->
+                    @foreach($users as $user)
+                    <tr>
+                        <th>{{ $user->userId }}</th>
+                        <th>{{ $user->fullName }}</th>
+                        <th>{{ $user->role }}</th>
+                        <th>{{ $user->email }}</th>
+                        <th>{{ $user->acceptTerms }}</th>
+                        <th>{{ $user->favorite_animal }}</th>
+                        <th>{{ $user->favorite_color }}</th>
+                        <th>{{ $user->child_birth_year }}</th>
+                        <th>
+                            @if ($user->role!='Admin')
+                            {{-- Update Button --}}
+                            <a href="{{ route('admin.updateUser',$user->userId) }}" class="btn btn-success">
+                            Update Account
+                            </a>
+
+                            {{-- Delete Button --}}
+                            <a href="{{ route('admin.deleteUser',$user->userId) }}" class="btn btn-danger"
+                            onclick="return confirm('Are you sure to delete this account ?');">
+                            Delete Account
+                            </a>
+                            @endif
+                        </th>
+                    </tr>
+                    @endforeach
                 </tbody>
 
             </table>

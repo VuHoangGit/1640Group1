@@ -32,7 +32,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/newUser', [AdminController::class, 'newUser'])->name('admin.newUser');
         Route::post('/newUser', [AdminController::class, 'createNewUser'])->name('createNewUser');
         Route::get('/userManagement', [AdminController::class, 'userManagement'])->name('admin.userManagement');
-        Route::get('/staffManagement', [AdminController::class, 'staffmanagement'])->name('admin.staffmanagement');
+        Route::get('/staffManagement', [AdminController::class, 'staffmanagement'])->name('admin.staffManagement');
+        Route::get('/updateUser/{userId}', [AdminController::class, 'viewUpdateUser'])->name('admin.updateUser');
+        Route::post('/updateUser/{userId}', [AdminController::class, 'updateUser'])->name('updateUser');
+        Route::get('/deleteUser/{userId}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
 
         // Ideas & Media
         Route::get('/ideas', [AdminController::class, 'ideaList'])->name('admin.ideas');
