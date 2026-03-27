@@ -77,6 +77,18 @@ Route::middleware('auth')->group(function () {
         Route::post('/authSetup', [StaffController::class, 'authQuestionSetup'])->name('createAuthAnswer');
     });
 
+    // --- SECURITY QUESTIONS MANAGEMENT ---
+    Route::get('/security-questions', [PortalController::class, 'showSecurityQuestions'])->name('securityQuestions');
+    Route::post('/security-questions', [PortalController::class, 'verifySecurityQuestion'])->name('verifySecurityQuestion');
+    Route::get('/security-questions/edit', [PortalController::class, 'showSecurityQuestionsEdit'])->name('securityQuestionsEdit');
+    Route::post('/security-questions/update', [PortalController::class, 'updateSecurityQuestions'])->name('updateSecurityQuestions');
+
+    // --- CHANGE PASSWORD (đã đăng nhập) ---
+    Route::get('/change-password', [PortalController::class, 'showChangePassword'])->name('changePassword');
+    Route::post('/change-password', [PortalController::class, 'verifyChangePassword'])->name('verifyChangePassword');
+    Route::get('/change-password/new', [PortalController::class, 'showChangePasswordNew'])->name('changePasswordNew');
+    Route::post('/change-password/update', [PortalController::class, 'updatePassword'])->name('updatePassword');
+
     // --- LOGOUT ---
     Route::post('/logout', [PortalController::class, 'logout'])->name('logout');
 

@@ -145,6 +145,12 @@
         </nav>
 
         <div class="mt-auto border-top pt-3">
+            <a href="{{ route('securityQuestions') }}" class="nav-link fw-bold" style="color: #6c757d;">
+                <i class="bi bi-shield-lock"></i> Security Questions
+            </a>
+            <a href="{{ route('changePassword') }}" class="nav-link fw-bold" style="color: #2b99d6;">
+                <i class="bi bi-key"></i> Change Password
+            </a>
             <a href="#" class="nav-link text-danger fw-bold" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="bi bi-box-arrow-left"></i> Logout
             </a>
@@ -163,6 +169,13 @@
             </div>
             <img src="https://ui-avatars.com/api/?name={{ Auth::user()->fullName ?? Auth::user()->username ?? 'A' }}&background=2b99d6&color=fff" class="profile-img">
         </div>
+
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
 
         @yield('content')
 

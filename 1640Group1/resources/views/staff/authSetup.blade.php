@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home | Academic Portal</title>
+    <title>Security Setup | Academic Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -53,38 +53,35 @@
             margin-bottom: 30px;
         }
 
-        /* Style cho các nút điều hướng chính */
-        .home-menu-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            margin-bottom: 15px;
-            border: 1px solid #eee;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #444;
+        .form-control {
+            border: none;
+            border-bottom: 2px solid #eee;
+            border-radius: 0;
+            padding: 10px 0;
+            box-shadow: none !important;
+            background: transparent;
+        }
+
+        .form-control:focus {
+            border-bottom-color: #3498db;
+        }
+
+        .form-control.is-invalid {
+            border-bottom-color: #dc3545;
+        }
+
+        .btn-submit {
+            background-color: #2b99d6;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: 600;
+            margin-top: 20px;
             transition: 0.3s;
         }
 
-        .home-menu-item:hover {
-            background-color: #f8fbff;
-            border-color: #2b99d6;
-            color: #2b99d6;
-            transform: translateX(5px);
-        }
-
-        .home-menu-item i {
-            font-size: 1.5rem;
-            margin-right: 15px;
-            color: #2b99d6;
-        }
-
-        .btn-logout {
-            margin-top: 20px;
-            color: #dc3545;
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 600;
+        .btn-submit:hover {
+            background-color: #217db3;
         }
     </style>
 </head>
@@ -97,35 +94,50 @@
         </div>
 
         <div class="col-md-6 login-form-section">
-            <div class="mb-5">
-                <h3 class="fw-bold mb-1">Finish setting up for your account</h3>
-                <p class="text-muted">Questions to retrieve your password</p>
+            <div class="university-url">🌐 www.universityname.ac.in</div>
+
+            <div class="mb-4">
+                <h3 class="fw-bold mb-1">Set up your security question</h3>
+                <p class="text-muted small">This will be used to verify your identity when you forget your password.</p>
             </div>
+
+            @if($errors->any())
+                <div class="alert alert-danger py-2 mb-3" role="alert">
+                    <ul class="mb-0" style="padding-left: 15px; font-size: 14px;">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <form action="{{ route('createAuthAnswer') }}" method="POST">
                 @csrf
 
-                <div class="mb-2">
-                    <label>Favorite animal</label>
-                    <input type="text" name="favorite_animal" class="form-control" placeholder="" required>
+                <div class="mb-3">
+                    <label class="text-muted small">Choose a security question</label>
+                    <select name="security_question"
+                        class="form-control @error('security_question') is-invalid @enderror"
+                        style="background-color: white; border: none; border-bottom: 2px solid #eee; border-radius: 0; padding: 10px 0;">
+                        <option value="favorite_animal" {{ old('security_question') == 'favorite_animal' ? 'selected' : '' }}>What is your favorite animal?</option>
+                        <option value="favorite_color" {{ old('security_question') == 'favorite_color' ? 'selected' : '' }}>What is your favorite color?</option>
+                        <option value="child_birth_year" {{ old('security_question') == 'child_birth_year' ? 'selected' : '' }}>What is your child's birth year?</option>
+                    </select>
                 </div>
 
-                <div class="mb-2">
-                    <label>Favorite color</label>
-                    <input type="text" name="favorite_color" class="form-control" placeholder="example@university.edu" required>
+                <div class="mb-3">
+                    <label class="text-muted small">Your answer</label>
+                    <input type="text" name="answer" value="{{ old('answer') }}"
+                        class="form-control @error('answer') is-invalid @enderror"
+                        required>
                 </div>
 
-                <div class="mb-2">
-                    <label>Child birth year</label>
-                    <input type="text" name="child_birth_year" class="form-control" placeholder="" required>
+                <div class="mb-3">
+                    <input type="checkbox" name="term" id="term" required>
+                    <label for="term" class="text-muted small ms-1">I accept the terms &amp; service</label>
                 </div>
 
-                <div class="mb-2">
-                    <input type="checkbox" name="term" required>
-                    <label>Accept term & service</label>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100 btn-create">Submit</button>
+                <button type="submit" class="btn btn-primary w-100 btn-submit">Finish Setup</button>
             </form>
         </div>
     </div>
