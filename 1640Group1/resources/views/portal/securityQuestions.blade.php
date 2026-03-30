@@ -100,7 +100,8 @@
 <div class="login-container">
     <div class="row g-0">
         <div class="col-md-6 login-sidebar d-none d-md-flex">
-            <a href="javascript:history.back()" class="back-button">‹</a>
+            @php $dashboardUrl = Auth::user()->role === 'Admin' ? route('admin.home') : route('staff.home'); @endphp
+            <a href="{{ $dashboardUrl }}" class="back-button">‹</a>
             <img src="https://cdni.iconscout.com/illustration/premium/thumb/forgot-password-mobile-4268413-3551733.png" alt="Security Questions Illustration" class="illustration">
         </div>
 
@@ -153,7 +154,7 @@
                 <button type="submit" class="btn btn-primary w-100 btn-verify text-uppercase">Verify & Continue</button>
 
                 <div class="text-center mt-4">
-                    <a href="javascript:history.back()" class="text-decoration-none text-muted small">Cancel</a>
+                    <a href="{{ $dashboardUrl }}" class="text-decoration-none text-muted small">Cancel</a>
                 </div>
             </form>
         </div>
