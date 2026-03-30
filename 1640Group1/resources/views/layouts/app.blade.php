@@ -129,6 +129,40 @@
                     <i class="bi bi-globe2"></i> Social Media Management
                 </a>
 
+            @elseif(Auth::user() && Auth::user()->role === 'Staff')
+                <a class="nav-link {{ request()->routeIs('staff.home') ? 'active' : '' }}" href="{{ route('staff.home') }}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+
+                <a class="nav-link {{ request()->routeIs('staff.socialMedia') ? 'active' : '' }}" href="{{ route('staff.socialMedia') }}">
+                    <i class="bi bi-globe2"></i> Social Media
+                </a>
+
+                <a class="nav-link {{ request()->routeIs('staff.mySubmissions') ? 'active' : '' }}" href="{{ route('staff.mySubmissions') }}">
+                    <i class="bi bi-cloud-arrow-up"></i> My Submissions
+                </a>
+
+            @elseif(Auth::user() && Auth::user()->role === 'QACoordinator')
+                <a class="nav-link {{ request()->routeIs('qa_coordinator.home') ? 'active' : '' }}" href="{{ route('qa_coordinator.home') }}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+
+                <a class="nav-link {{ request()->routeIs('staff.socialMedia') ? 'active' : '' }}" href="{{ route('staff.socialMedia') }}">
+                    <i class="bi bi-globe2"></i> Social Media
+                </a>
+
+                <a class="nav-link {{ request()->routeIs('qa_coordinator.categoryManagement') ? 'active' : '' }}" href="{{ route('qa_coordinator.categoryManagement') }}">
+                    <i class="bi bi-globe2"></i> CategoryManagement
+                </a>
+
+                <a class="nav-link {{ request()->routeIs('qa_coordinator.ideaManagement') ? 'active' : '' }}" href="{{ route('qa_coordinator.ideaManagement') }}">
+                    <i class="bi bi-globe2"></i> Idea Management
+                </a>
+
+                {{-- <a class="nav-link {{ request()->routeIs('staff.mySubmissions') ? 'active' : '' }}" href="{{ route('staff.mySubmissions') }}">
+                    <i class="bi bi-cloud-arrow-up"></i> My Submissions
+                </a> --}}
+
             @else
                 <a class="nav-link {{ request()->routeIs('staff.home') ? 'active' : '' }}" href="{{ route('staff.home') }}">
                     <i class="bi bi-speedometer2"></i> Dashboard

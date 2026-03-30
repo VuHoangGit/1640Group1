@@ -46,7 +46,14 @@ class PortalController extends Controller
                     return redirect()->route('staff.authSetup');
                 }
 
-                return redirect()->intended(route('staff.home'));
+                if ($role === 'staff'){
+                    return redirect()->intended(route('staff.home'));
+                }else if ($role === 'qamanager'){
+                    return redirect()->intended(route('qa_manager.home'));
+                }else if ($role === 'qacoordinator'){
+                    return redirect()->intended(route('qa_coordinator.home'));
+                }
+
 
             } else {
                 return back()->withErrors(['password' => 'Incorrect password.'])->withInput();

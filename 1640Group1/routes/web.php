@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\QACoordinatorController;
 
 // CÁC ROUTE CÔNG KHAI (Dành cho khách chưa đăng nhập)
 Route::middleware('guest')->group(function () {
@@ -71,6 +72,27 @@ Route::middleware('auth')->group(function () {
 
         // Bấm Like / Dislike
         Route::post('/react-idea/{id}', [StaffController::class, 'react'])->name('staff.reactIdea');
+
+        // Thiết lập câu hỏi bảo mật
+        Route::get('/authSetup', [StaffController::class, 'authSetup'])->name('staff.authSetup');
+        Route::post('/authSetup', [StaffController::class, 'authQuestionSetup'])->name('createAuthAnswer');
+    });
+
+        // --- COORDINATOR ROUTES ---
+    Route::prefix('qa_coordinator')->group(function () {
+        Route::get('/home', [QACoordinatorController::class, 'home'])->name('qa_coordinator.home');
+
+        // Quản lý category
+        Route::get('/newCategory', [AdminController::class, 'newCategory'])->name('qa_coordinator.newCategory');
+        Route::post('/newCategory', [AdminController::class, 'createNewCategory'])->name('createNewCategory');
+        Route::get('/categoryManagement', [QACoordinatorController::class, 'categoryManagement'])->name('qa_coordinator.categoryManagement');
+        Route::get('/updateCategory/{categoryId}', [QACoordinatorController::class, 'viewUpdateCategory'])->name('qa_coordinator.updateCategory');
+        Route::post('/updateCategory/{categoryId}', [QACoordinatorController::class, 'updateCategory'])->name('updateCategory');
+        Route::get('/deleteCategory/{categoryId}', [QACoordinatorController::class, 'deleteCategory'])->name('qa_coordinator.deleteCategory');
+
+        // Quản lý idea
+        Route::get('/ideaManagement', [QACoordinatorController::class, 'ideaManagement'])->name('qa_coordinator.ideaManagement');
+        Route::get('/deleteIdea/{ideaId}', [QACoordinatorController::class, 'deleteIdea'])->name('qa_coordinator.deleteIdea');
 
         // Thiết lập câu hỏi bảo mật
         Route::get('/authSetup', [StaffController::class, 'authSetup'])->name('staff.authSetup');

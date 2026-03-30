@@ -45,5 +45,33 @@ class UserSeeder extends Seeder
             'favorite_color' => 'white',
             'child_birth_year' => '2000'
         ]);
+
+        // 3. Staff đã có bảo mật sẵn
+        User::create([
+            'username' => 'coordinator',
+            'fullName' => 'Coordinator Mike',
+            'email' => 'coordinator@gmail.com',
+            'passwordHash' => Hash::make('123456'),
+            'role' => 'QACoordinator',
+            'isActive' => true,
+            'acceptTerms' => true,
+            'favorite_animal' => 'lion',
+            'favorite_color' => 'yellow',
+            'child_birth_year' => '1990'
+        ]);
+
+        // 3. Staff đã có bảo mật sẵn
+        User::create([
+            'username' => 'qamanager',
+            'fullName' => 'manager Steve',
+            'email' => 'manager@gmail.com',
+            'passwordHash' => Hash::make('123456'),
+            'role' => 'QAManager',
+            'isActive' => true,
+            'acceptTerms' => true,
+            'favorite_animal' => 'hippo',
+            'favorite_color' => 'blue',
+            'child_birth_year' => '1996'
+        ]);
     }
 }

@@ -41,16 +41,24 @@ class StaffController extends Controller
             'term' => ['required']
         ]);
 
-        $user = Auth::user();
+        // $user = Auth::user();
 
-        if($user) {
-            $user->update([
-                'favorite_animal' => $request->favorite_animal,
-                'favorite_color' => $request->favorite_color,
-                'child_birth_year' => $request->child_birth_year
-            ]);
-            return redirect()->route('staff.home')->with('success', 'Setup security questions completed!');
-        }
+        $user = User::findOrFail(session('loginId'));
+
+        $user->favorite_animal = $request->favorite_animal;
+        $user->favorite_color = $request->favorite_color;
+        $user->child_birth_year = $request->child_birth_year;
+
+        $user->save();
+
+        // if($user) {
+        //     $user->update([
+        //         'favorite_animal' => $request->favorite_animal,
+        //         'favorite_color' => $request->favorite_color,
+        //         'child_birth_year' => $request->child_birth_year
+        //     ]);
+        //     return redirect()->route('staff.home')->with('success', 'Setup security questions completed!');
+        // }
 
         return redirect()->route('loginPage');
     }
