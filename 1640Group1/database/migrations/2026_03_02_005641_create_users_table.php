@@ -24,7 +24,6 @@ public function up(): void
         $table->boolean('acceptTerms')->default(true);
         $table->boolean('isActive')->default(true);
 
-        // BỔ SUNG CÁC CỘT BẢO MẬT (Cho phép null để không lỗi khi tạo user mới)
         $table->string('favorite_animal')->nullable();
         $table->string('favorite_color')->nullable();
         $table->string('child_birth_year')->nullable();

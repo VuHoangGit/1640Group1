@@ -13,7 +13,7 @@ public function up()
 {
     Schema::create('categories', function (Blueprint $table) {
         $table->id('categoryId');
-        $table->string('name'); // Tên danh mục (Math, History...)
+        $table->string('name'); // Tên danh mục (Business, Design...)
         $table->timestamps();
     });
 }

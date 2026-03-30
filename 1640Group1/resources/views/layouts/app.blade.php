@@ -131,7 +131,7 @@
 
             @elseif(Auth::user() && Auth::user()->role === 'Staff')
                 <a class="nav-link {{ request()->routeIs('staff.home') ? 'active' : '' }}" href="{{ route('staff.home') }}">
-                    <i class="bi bi-speedometer2"></i> Dashboard
+                    <i class="bi bi-speedometer2"></i> Home
                 </a>
 
                 <a class="nav-link {{ request()->routeIs('staff.socialMedia') ? 'active' : '' }}" href="{{ route('staff.socialMedia') }}">
@@ -144,7 +144,7 @@
 
             @elseif(Auth::user() && Auth::user()->role === 'QACoordinator')
                 <a class="nav-link {{ request()->routeIs('qa_coordinator.home') ? 'active' : '' }}" href="{{ route('qa_coordinator.home') }}">
-                    <i class="bi bi-speedometer2"></i> Dashboard
+                    <i class="bi bi-speedometer2"></i> Home
                 </a>
 
                 <a class="nav-link {{ request()->routeIs('staff.socialMedia') ? 'active' : '' }}" href="{{ route('staff.socialMedia') }}">
@@ -165,7 +165,7 @@
 
             @else
                 <a class="nav-link {{ request()->routeIs('staff.home') ? 'active' : '' }}" href="{{ route('staff.home') }}">
-                    <i class="bi bi-speedometer2"></i> Dashboard
+                    <i class="bi bi-speedometer2"></i> Home
                 </a>
 
                 <a class="nav-link {{ request()->routeIs('staff.socialMedia') ? 'active' : '' }}" href="{{ route('staff.socialMedia') }}">
