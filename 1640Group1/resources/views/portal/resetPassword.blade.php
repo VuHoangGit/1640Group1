@@ -77,6 +77,10 @@
             border-bottom-color: #3498db;
         }
 
+        .form-control.is-invalid {
+            border-bottom-color: #dc3545;
+        }
+
         .btn-change {
             background-color: #2b99d6;
             border: none;
@@ -116,22 +120,36 @@
                 <p class="instruction-text">Your new password must be different from previous used passwords.</p>
             </div>
 
+            @if($errors->any())
+                <div class="alert alert-danger py-2 mb-3" role="alert">
+                    <ul class="mb-0" style="padding-left: 15px; font-size: 14px;">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('passwordReset') }}" method="POST">
                 @csrf
                 <div class="mb-4">
                     <label class="text-muted small fw-bold">New password</label>
-                    <input type="password" name="newPassword" class="form-control" placeholder="Enter new password" required>
+                    <input type="password" name="newPassword"
+                        class="form-control @error('newPassword') is-invalid @enderror"
+                        placeholder="Enter new password" required>
                 </div>
 
                 <div class="mb-4">
                     <label class="text-muted small fw-bold">Verify Password</label>
-                    <input type="password" name="verifyPassword" class="form-control" placeholder="Re-enter new password" required>
+                    <input type="password" name="verifyPassword"
+                        class="form-control @error('verifyPassword') is-invalid @enderror"
+                        placeholder="Re-enter new password" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 btn-change text-uppercase">Change Password</button>
 
                 <div class="text-center mt-4">
-                    <a href="{{ route('login') }}" class="text-decoration-none text-muted small">Back to Login</a>
+                    <a href="{{ route('loginPage') }}" class="text-decoration-none text-muted small">Back to Login</a>
                 </div>
             </form>
         </div>

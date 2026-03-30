@@ -95,6 +95,14 @@
             font-size: 0.9rem;
             font-weight: 600;
         }
+
+        .btn-change-password {
+            margin-top: 20px;
+            color: #2b99d6;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -112,6 +120,13 @@
                 <h3 class="fw-bold mb-1">Welcome back!</h3>
                 <p class="text-muted">Academic Portal Homepage</p>
             </div>
+
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
 
             <div class="menu-list">
                 {{-- <a href="{{ route('admin.userManagement') }}" class="home-menu-item">
@@ -145,9 +160,21 @@
                         <div class="small text-muted">View statistics and analytics</div>
                     </div>
                 </a>
+
+                <a href="{{ route('securityQuestions') }}" class="home-menu-item">
+                    <i class="bi bi-shield-lock" style="color: #6c757d;"></i>
+                    <div>
+                        <div class="fw-bold">Security Questions</div>
+                        <div class="small text-muted">Manage your security question answers</div>
+                    </div>
+                </a>
             </div>
 
             <div class="text-center">
+                <a href="{{ route('changePassword') }}" class="btn-change-password d-inline-block">
+                    <i class="bi bi-key"></i> Change Password
+                </a>
+                <br>
                 <a href="{{ route('logout') }}" class="btn-logout d-inline-block"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="bi bi-box-arrow-left"></i> Logout System
