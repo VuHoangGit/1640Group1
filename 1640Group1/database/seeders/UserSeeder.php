@@ -46,7 +46,7 @@ class UserSeeder extends Seeder
             'child_birth_year' => '2000'
         ]);
 
-        // 3. Staff đã có bảo mật sẵn
+        // 3. Coordinator đã có bảo mật sẵn
         User::create([
             'username' => 'coordinator',
             'fullName' => 'Coordinator Mike',
@@ -60,7 +60,7 @@ class UserSeeder extends Seeder
             'child_birth_year' => '1990'
         ]);
 
-        // 3. Staff đã có bảo mật sẵn
+        // 3. Manager đã có bảo mật sẵn
         User::create([
             'username' => 'qamanager',
             'fullName' => 'manager Steve',

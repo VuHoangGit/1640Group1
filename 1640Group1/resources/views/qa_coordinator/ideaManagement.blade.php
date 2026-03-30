@@ -30,10 +30,10 @@
                         <th>{{ $idea->categoryId }}</th>
                         <th>{{ $idea->title }}</th>
                         <th>{{ $idea->description }}</th>
-                        <th>
-                            <a href="{{ route('staff.downloadIdea', $idea->ideaId) }}" class="btn btn-primary rounded-circle shadow-sm" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;" title="Download File">
+                        <th>{{ $idea->filePath }}
+                            {{-- <a href="{{ route('staff.downloadIdea', $idea->ideaId) }}" class="btn btn-primary rounded-circle shadow-sm" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;" title="Download File">
                                 <i class="bi bi-cloud-arrow-down-fill fs-5"></i>
-                            </a>
+                            </a> --}}
                         </th>
 
                         <th>

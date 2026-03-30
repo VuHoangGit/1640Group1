@@ -83,16 +83,10 @@ class AdminController extends Controller
 
     public function updateUser(Request $request, $userId){
         $request->validate([
-            'username' => ['required', 'unique:users,username'],
-            'fullName' => ['required'],
-            'email'    => ['required','email','unique:users,email'],
             'password' => ['max:20'],
             'role'     => ['required','in:Staff,QACoordinator,QAManager']
         ]);
         $user = User::findOrFail($userId);
-        $user->username = $request->username;
-        $user->fullName = $request->fullName;
-        $user->email = $request->email;
         $user->role = $request->role;
         if ($request->password!= null){
             $user->passwordHash = Hash::make($request->password);

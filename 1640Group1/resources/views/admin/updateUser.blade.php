@@ -25,17 +25,17 @@
         <div class="row">
             <div class="col-md-6 mb-2">
                 <label>Username (Login ID)</label>
-                <input type="text" name="username" class="form-control" value="{{ $user->username }}" required>
+                <input type="text" name="username" class="form-control" value="{{ $user->username }}" readonly style="background-color: bisque">
             </div>
             <div class="col-md-6 mb-2">
                 <label>Full Name</label>
-                <input type="text" name="fullName" class="form-control" value="{{ $user->fullName }}" required>
+                <input type="text" name="fullName" class="form-control" value="{{ $user->fullName }}" readonly style="background-color: bisque">
             </div>
         </div>
 
         <div class="mb-2">
             <label>Email Address</label>
-            <input type="email" name="email" class="form-control" value="{{ $user->email }}" required>
+            <input type="email" name="email" class="form-control" value="{{ $user->email }}" readonly style="background-color: bisque">
         </div>
 
         <div class="mb-2">

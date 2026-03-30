@@ -112,7 +112,7 @@
 
                 <div class="mb-2">
                     <label>Favorite color</label>
-                    <input type="text" name="favorite_color" class="form-control" placeholder="example@university.edu" required>
+                    <input type="text" name="favorite_color" class="form-control" placeholder="" required>
                 </div>
 
                 <div class="mb-2">

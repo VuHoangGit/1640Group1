@@ -172,8 +172,8 @@
                     <i class="bi bi-globe2"></i> Social Media
                 </a>
 
-                <a class="nav-link {{ request()->routeIs('staff.mySubmissions') ? 'active' : '' }}" href="{{ route('staff.mySubmissions') }}">
-                    <i class="bi bi-cloud-arrow-up"></i> My Submissions
+                <a class="nav-link {{ request()->routeIs('admin.staffmanagement') ? 'active' : '' }}" href="{{ route('admin.staffManagement') }}">
+                    <i class="bi bi-people"></i> Staff Management
                 </a>
             @endif
         </nav>

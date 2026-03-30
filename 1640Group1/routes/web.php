@@ -6,6 +6,7 @@ use App\Http\Controllers\PortalController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QACoordinatorController;
+use App\Http\Controllers\QAManagerController;
 
 // CÁC ROUTE CÔNG KHAI (Dành cho khách chưa đăng nhập)
 Route::middleware('guest')->group(function () {
@@ -98,6 +99,24 @@ Route::middleware('auth')->group(function () {
         Route::get('/authSetup', [StaffController::class, 'authSetup'])->name('staff.authSetup');
         Route::post('/authSetup', [StaffController::class, 'authQuestionSetup'])->name('createAuthAnswer');
     });
+
+    Route::prefix('qa_manager')->group(function () {
+        Route::get('/home', [QAManagerController::class, 'home'])->name('qa_manager.home');
+
+        // Quản lý người dùng
+        Route::get('/newUser', [AdminController::class, 'newUser'])->name('admin.newUser');
+        Route::post('/newUser', [AdminController::class, 'createNewUser'])->name('createNewUser');
+        Route::get('/userManagement', [AdminController::class, 'userManagement'])->name('admin.userManagement');
+        Route::get('/staffManagement', [AdminController::class, 'staffmanagement'])->name('admin.staffManagement');
+        Route::get('/updateUser/{userId}', [AdminController::class, 'viewUpdateUser'])->name('admin.updateUser');
+        Route::post('/updateUser/{userId}', [AdminController::class, 'updateUser'])->name('updateUser');
+        Route::get('/deleteUser/{userId}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
+
+        // Thiết lập câu hỏi bảo mật
+        Route::get('/authSetup', [StaffController::class, 'authSetup'])->name('staff.authSetup');
+        Route::post('/authSetup', [StaffController::class, 'authQuestionSetup'])->name('createAuthAnswer');
+    });
+
 
     // --- LOGOUT ---
     Route::post('/logout', [PortalController::class, 'logout'])->name('logout');
