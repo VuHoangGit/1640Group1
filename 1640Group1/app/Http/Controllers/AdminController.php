@@ -31,7 +31,7 @@ class AdminController extends Controller
         // Save to Database
         User::create([
             'username'    => $request->username,
-            'fullName'    => $request->fullName, // Thêm dòng này
+            'fullName'    => $request->fullName,
             'email'       => $request->email,
             'passwordHash'=> Hash::make($request->password),
             'role'        => $request->role,
@@ -46,18 +46,64 @@ class AdminController extends Controller
         return view("admin.userManagement");
     }
 
+    // DASHBOARD
     public function dashboard(){
+        // Bar Chart (Ideas by Category)
         $ideasByCategory = Idea::join('categories', 'ideas.categoryId', '=', 'categories.categoryId')
             ->select('categories.name', DB::raw('count(*) as total'))
             ->groupBy('categories.categoryId', 'categories.name')
             ->get();
 
-        $ideasByStaff = Idea::join('users', 'ideas.userId', '=', 'users.userId')
-            ->select('users.username', DB::raw('count(*) as total'))
-            ->groupBy('users.userId', 'users.username')
+        // Horizontal Bar Chart (Top 5 Employees)
+        $topStaffs = Idea::join('users', 'ideas.userId', '=', 'users.userId')
+            ->select('users.fullName', 'users.username', DB::raw('count(*) as total'))
+            ->groupBy('users.userId', 'users.fullName', 'users.username')
+            ->orderBy('total', 'desc')
+            ->limit(5)
             ->get();
 
-        return view("admin.dashboard", compact('ideasByCategory', 'ideasByStaff'));
+        // Pie Chart (Role ratio)
+        $usersByRole = User::select('role', DB::raw('count(*) as total'))
+            ->groupBy('role')
+            ->get();
+
+        // Doughnut Chart (Total votes across the entire system)
+        $totalUpvotes = \App\Models\Reaction::where('is_upvote', true)->count();
+        $totalDownvotes = \App\Models\Reaction::where('is_upvote', false)->count();
+
+        // Line Chart (Daily posting trends)
+        $ideasTrend = Idea::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total'))
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->limit(14) // Get the last 14 days
+            ->get();
+
+        // Stacked Bar Chart (Emotions - Vote by Category)
+        $reactionsByCategory = \App\Models\Category::leftJoin('ideas', 'categories.categoryId', '=', 'ideas.categoryId')
+            ->leftJoin('reactions', 'ideas.ideaId', '=', 'reactions.ideaId')
+            ->select(
+                'categories.name',
+                DB::raw('COUNT(CASE WHEN reactions.is_upvote = true THEN 1 END) as upvotes'),
+                DB::raw('COUNT(CASE WHEN reactions.is_upvote = false THEN 1 END) as downvotes')
+            )
+            ->groupBy('categories.categoryId', 'categories.name')
+            ->get();
+
+        // Tổng hợp con số cho thẻ Summary
+        $totalUsers = User::count();
+        $totalIdeas = Idea::count();
+
+        return view("admin.dashboard", compact(
+            'ideasByCategory',
+            'topStaffs',
+            'usersByRole',
+            'totalUpvotes',
+            'totalDownvotes',
+            'ideasTrend',
+            'reactionsByCategory',
+            'totalUsers',
+            'totalIdeas'
+        ));
     }
 
     public function socialmedia()
@@ -76,6 +122,7 @@ class AdminController extends Controller
         $user->delete();
         return redirect()->back();
     }
+
     public function viewUpdateUser($userId){
         $user = User::findOrFail($userId);
         return view('admin.updateUser', compact('user'));

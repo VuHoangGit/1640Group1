@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('reactions', function (Blueprint $table) {
             $table->id();
-            // Liên kết với bảng ideas và users
+            // Link table ideas & users
             $table->unsignedBigInteger('ideaId');
             $table->unsignedBigInteger('userId');
-            // Loại vote: 1 là Thumbs Up, 0 là Thumbs Down
+            // Vote type: 1 = Thumbs Up, 0 = Thumbs Down
             $table->boolean('is_upvote');
             $table->timestamps();
 
-            // Đảm bảo 1 user chỉ có 1 record vote cho 1 idea
+            // Each user can only have one vote record for one idea.
             $table->unique(['ideaId', 'userId']);
         });
     }
