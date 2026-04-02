@@ -30,7 +30,7 @@
                             <td class="ps-4 text-muted">{{ $key + 1 }}</td>
 
                             <td>
-                                <span class="badge bg-info text-dark rounded-pill" style="font-size: 0.7rem;">{{ $category->name ?? 'N/A' }}</span>
+                                <div class="fw-bold text-primary mb-1 text-truncate" style="max-width: 200px;" title="{{ $category->name }}">{{ $category->name }}</div>
                             </td>
 
                                 <@php
