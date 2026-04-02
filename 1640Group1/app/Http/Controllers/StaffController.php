@@ -42,26 +42,29 @@ class StaffController extends Controller
     }
 
     public function authSetup(){
-        $user = User::find(session('loginId'));
-        if($user && $user->favorite_animal != null){
-            return redirect('/staff/home');
+        $user = User::find(Auth::id());
+        // Kiểm tra nếu đã có active_security_question thì không cần setup lại
+        if (!empty($user->active_security_question)) {
+            return redirect()->route('staff.home');
         }
         return view('staff.authSetup');
     }
 
     public function authQuestionSetup(Request $request){
         $request->validate([
-            'favorite_animal' => ['required'],
-            'favorite_color' => ['required'],
-            'child_birth_year' => ['required'],
-            'term' => ['required']
+            'security_question' => ['required', 'in:favorite_animal,favorite_color,child_birth_year'],
+            'answer'            => ['required'],
+            'term'              => ['required']
         ]);
 
-        $user = User::findOrFail(session('loginId'));
-        $user->favorite_animal = $request->favorite_animal;
-        $user->favorite_color = $request->favorite_color;
-        $user->child_birth_year = $request->child_birth_year;
-        $user->save();
+        $user = User::find(Auth::id());
+
+        if ($user) {
+            $user->{$request->security_question}  = $request->answer;
+            $user->active_security_question        = $request->security_question;
+            $user->save();
+            return redirect()->route('staff.home')->with('success', 'Security question set up successfully!');
+        }
 
         return redirect()->route('loginPage');
     }

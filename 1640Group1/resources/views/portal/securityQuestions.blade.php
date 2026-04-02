@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retrieve Password | Academic Portal</title>
+    <title>Security Questions | Academic Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -100,16 +100,18 @@
 <div class="login-container">
     <div class="row g-0">
         <div class="col-md-6 login-sidebar d-none d-md-flex">
-            <a href="{{ route('loginPage') }}" class="back-button">‹</a>
-            <img src="https://cdni.iconscout.com/illustration/premium/thumb/forgot-password-mobile-4268413-3551733.png" alt="Forgot Password Illustration" class="illustration">
+            @php $dashboardUrl = Auth::user()->role === 'Admin' ? route('admin.home') : route('staff.home'); @endphp
+            <a href="{{ $dashboardUrl }}" class="back-button">‹</a>
+            <img src="https://cdni.iconscout.com/illustration/premium/thumb/forgot-password-mobile-4268413-3551733.png" alt="Security Questions Illustration" class="illustration">
         </div>
 
         <div class="col-md-6 login-form-section">
             <div class="university-url">🌐 www.universityname.ac.in</div>
 
             <div class="mb-4">
-                <h3 class="fw-bold mb-1">Retrieve password</h3>
-                <p class="text-muted small">Enter your email and verify your identity to reset your password.</p>
+                <h3 class="fw-bold mb-1">Manage Security Questions</h3>
+                <p class="text-muted small">Logged in as <strong>{{ Auth::user()->email }}</strong></p>
+                <p class="text-muted small">Verify your identity first by answering one of your security questions.</p>
             </div>
 
             @if(session('error'))
@@ -128,18 +130,11 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('verifyQuestion') }}">
+            <form method="POST" action="{{ route('verifySecurityQuestion') }}">
                 @csrf
 
                 <div class="mb-3">
-                    <label class="text-muted small">Email address</label>
-                    <input type="email" name="email" value="{{ old('email') }}"
-                        class="form-control @error('email') is-invalid @enderror"
-                        required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="text-muted small">Security question</label>
+                    <label class="text-muted small">Choose a question to verify</label>
                     <select name="security_question"
                         class="form-control @error('security_question') is-invalid @enderror"
                         style="background-color: white; border: none; border-bottom: 2px solid #eee; border-radius: 0; padding: 10px 0;">
@@ -150,7 +145,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="text-muted small">Answer</label>
+                    <label class="text-muted small">Your answer</label>
                     <input type="text" name="answer" value="{{ old('answer') }}"
                         class="form-control @error('answer') is-invalid @enderror"
                         required>
@@ -159,7 +154,7 @@
                 <button type="submit" class="btn btn-primary w-100 btn-verify text-uppercase">Verify & Continue</button>
 
                 <div class="text-center mt-4">
-                    <a href="{{ route('loginPage') }}" class="text-decoration-none text-muted small">Back to Login</a>
+                    <a href="{{ $dashboardUrl }}" class="text-decoration-none text-muted small">Cancel</a>
                 </div>
             </form>
         </div>

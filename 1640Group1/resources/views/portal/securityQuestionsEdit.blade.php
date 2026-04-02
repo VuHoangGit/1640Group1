@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retrieve Password | Academic Portal</title>
+    <title>Edit Security Questions | Academic Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -48,7 +48,7 @@
         }
 
         .illustration {
-            max-width: 80%;
+            max-width: 85%;
             height: auto;
         }
 
@@ -80,7 +80,7 @@
             border-bottom-color: #dc3545;
         }
 
-        .btn-verify {
+        .btn-save {
             background-color: #2b99d6;
             border: none;
             padding: 12px;
@@ -90,8 +90,9 @@
             transition: 0.3s;
         }
 
-        .btn-verify:hover {
+        .btn-save:hover {
             background-color: #217db3;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -100,21 +101,27 @@
 <div class="login-container">
     <div class="row g-0">
         <div class="col-md-6 login-sidebar d-none d-md-flex">
-            <a href="{{ route('loginPage') }}" class="back-button">‹</a>
-            <img src="https://cdni.iconscout.com/illustration/premium/thumb/forgot-password-mobile-4268413-3551733.png" alt="Forgot Password Illustration" class="illustration">
+            @php
+                $cancelUrl = $isFirstSetup
+                    ? (Auth::user()->role === 'Admin' ? route('admin.home') : route('staff.home'))
+                    : route('securityQuestions');
+            @endphp
+            <a href="{{ $cancelUrl }}" class="back-button" title="Back">‹</a>
+            <img src="https://cdni.iconscout.com/illustration/premium/thumb/forgot-password-4268397-3551717.png" alt="Edit Security Questions" class="illustration">
         </div>
 
         <div class="col-md-6 login-form-section">
             <div class="university-url">🌐 www.universityname.ac.in</div>
 
             <div class="mb-4">
-                <h3 class="fw-bold mb-1">Retrieve password</h3>
-                <p class="text-muted small">Enter your email and verify your identity to reset your password.</p>
+                <h3 class="fw-bold mb-1">{{ $isFirstSetup ? 'Set Up Security Question' : 'Update Security Question' }}</h3>
+                <p class="text-muted small">Logged in as <strong>{{ Auth::user()->email }}</strong></p>
+                <p class="text-muted small">{{ $isFirstSetup ? 'Choose a security question and set your answer.' : 'Choose which question to update and enter the new answer.' }}</p>
             </div>
 
-            @if(session('error'))
-                <div class="alert alert-danger py-2 mb-3" role="alert">
-                    {{ session('error') }}
+            @if(session('info'))
+                <div class="alert alert-info py-2 mb-3" role="alert">
+                    {{ session('info') }}
                 </div>
             @endif
 
@@ -128,18 +135,11 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('verifyQuestion') }}">
+            <form action="{{ route('updateSecurityQuestions') }}" method="POST">
                 @csrf
 
                 <div class="mb-3">
-                    <label class="text-muted small">Email address</label>
-                    <input type="email" name="email" value="{{ old('email') }}"
-                        class="form-control @error('email') is-invalid @enderror"
-                        required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="text-muted small">Security question</label>
+                    <label class="text-muted small">Select question</label>
                     <select name="security_question"
                         class="form-control @error('security_question') is-invalid @enderror"
                         style="background-color: white; border: none; border-bottom: 2px solid #eee; border-radius: 0; padding: 10px 0;">
@@ -150,16 +150,16 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="text-muted small">Answer</label>
-                    <input type="text" name="answer" value="{{ old('answer') }}"
-                        class="form-control @error('answer') is-invalid @enderror"
+                    <label class="text-muted small">New answer</label>
+                    <input type="text" name="new_answer" value="{{ old('new_answer') }}"
+                        class="form-control @error('new_answer') is-invalid @enderror"
                         required>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100 btn-verify text-uppercase">Verify & Continue</button>
+                <button type="submit" class="btn btn-primary w-100 btn-save text-uppercase">{{ $isFirstSetup ? 'Save Security Question' : 'Save Changes' }}</button>
 
                 <div class="text-center mt-4">
-                    <a href="{{ route('loginPage') }}" class="text-decoration-none text-muted small">Back to Login</a>
+                    <a href="{{ $cancelUrl }}" class="text-decoration-none text-muted small">Cancel</a>
                 </div>
             </form>
         </div>
