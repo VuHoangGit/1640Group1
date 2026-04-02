@@ -125,6 +125,10 @@
                     <i class="bi bi-people"></i> Staff Management
                 </a>
 
+                <a class="nav-link {{ request()->routeIs('admin.categoryManagement') ? 'active' : '' }}" href="{{ route('admin.categoryManagement') }}">
+                    <i class="bi bi-globe2"></i> Category Management
+                </a>
+
                 <a class="nav-link {{ request()->routeIs('admin.ideas') ? 'active' : '' }}" href="{{ route('admin.ideas') }}">
                     <i class="bi bi-globe2"></i> Social Media Management
                 </a>
@@ -164,7 +168,7 @@
                 </a> --}}
 
             @else
-                <a class="nav-link {{ request()->routeIs('staff.home') ? 'active' : '' }}" href="{{ route('staff.home') }}">
+                <a class="nav-link {{ request()->routeIs('qa_manager.home') ? 'active' : '' }}" href="{{ route('qa_manager.home') }}">
                     <i class="bi bi-speedometer2"></i> Home
                 </a>
 
@@ -172,7 +176,7 @@
                     <i class="bi bi-globe2"></i> Social Media
                 </a>
 
-                <a class="nav-link {{ request()->routeIs('admin.staffmanagement') ? 'active' : '' }}" href="{{ route('admin.staffManagement') }}">
+                <a class="nav-link {{ request()->routeIs('qa_manager.staffmanagement') ? 'active' : '' }}" href="{{ route('qa_manager.staffManagement') }}">
                     <i class="bi bi-people"></i> Staff Management
                 </a>
             @endif
