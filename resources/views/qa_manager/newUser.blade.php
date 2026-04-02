@@ -156,7 +156,7 @@
                 </div>
 
                 <div class="mb-2">
-                    <label>Assign Role</label>
+                    <label>Assign Role </label>
                     <select name="role" class="form-select {{ $errors->has('role') ? 'is-invalid' : '' }}" required>
                         <option value="" disabled selected>Select a role</option>
                         <option value="Staff" {{ old('role') == 'Staff' ? 'selected' : '' }}>Staff</option>
