@@ -42,16 +42,10 @@
                             </td>
 
                             <td class="text-center">
-                                <div class="d-flex justify-content-center gap-2">
-
-                                    <form action="{{ route('admin.deleteCategory', $category->categoryId) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Category">
-                                            <i class="bi bi-trash3"></i>
-                                        </button>
-                                    </form>
-                                </div>
+                                <a href="{{ route('admin.deleteCategory',$category->categoryId) }}" class="btn btn-danger"
+                                onclick="return confirm('Delete this category?');">
+                                Delete
+                                </a>
                             </td>
                         </tr>
                         @empty
