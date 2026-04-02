@@ -215,7 +215,7 @@
                 </a>
 
                 <a class="nav-link {{ request()->routeIs('admin.ideas') ? 'active' : '' }}" href="{{ route('admin.ideas') }}">
-                    <i class="bi bi-globe2"></i> Social Media Management
+                    <i class="bi bi-globe2"></i> Topic Management
                 </a>
 
             @elseif(Auth::user() && Auth::user()->role === 'Staff')
@@ -223,7 +223,7 @@
                     <i class="bi bi-speedometer2"></i> Home
                 </a>
                 <a class="nav-link {{ request()->routeIs('staff.socialMedia') ? 'active' : '' }}" href="{{ route('staff.socialMedia') }}">
-                    <i class="bi bi-globe2"></i> Social Media
+                    <i class="bi bi-globe2"></i> Topic List
                 </a>
                 <a class="nav-link {{ request()->routeIs('staff.mySubmissions') ? 'active' : '' }}" href="{{ route('staff.mySubmissions') }}">
                     <i class="bi bi-cloud-arrow-up"></i> My Submissions
@@ -234,13 +234,13 @@
                     <i class="bi bi-speedometer2"></i> Home
                 </a>
                 <a class="nav-link {{ request()->routeIs('staff.socialMedia') ? 'active' : '' }}" href="{{ route('staff.socialMedia') }}">
-                    <i class="bi bi-globe2"></i> Social Media
+                    <i class="bi bi-globe2"></i> Topic List
                 </a>
                 <a class="nav-link {{ request()->routeIs('qa_coordinator.categoryManagement') ? 'active' : '' }}" href="{{ route('qa_coordinator.categoryManagement') }}">
                     <i class="bi bi-globe2"></i> Category Management
                 </a>
                 <a class="nav-link {{ request()->routeIs('qa_coordinator.ideaManagement') ? 'active' : '' }}" href="{{ route('qa_coordinator.ideaManagement') }}">
-                    <i class="bi bi-globe2"></i> Idea Management
+                    <i class="bi bi-globe2"></i> Topic Management
                 </a>
 
             @else
@@ -248,7 +248,7 @@
                     <i class="bi bi-speedometer2"></i> Home
                 </a>
                 <a class="nav-link {{ request()->routeIs('staff.socialMedia') ? 'active' : '' }}" href="{{ route('staff.socialMedia') }}">
-                    <i class="bi bi-globe2"></i> Social Media
+                    <i class="bi bi-globe2"></i> Topic List
                 </a>
 
                 <a class="nav-link {{ request()->routeIs('qa_manager.staffmanagement') ? 'active' : '' }}" href="{{ route('qa_manager.staffManagement') }}">
