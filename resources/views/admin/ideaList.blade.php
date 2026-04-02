@@ -4,13 +4,6 @@
 <div class="container-fluid">
     <h2 class="fw-bold mb-4"><i class="bi bi-folder2-open"></i> Submitted Ideas Management</h2>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
     <div class="card border-0 shadow-sm">
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -68,17 +61,19 @@
 
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
-                                    <a href="{{ route('admin.download', $idea->ideaId) }}" class="btn btn-sm btn-outline-primary" title="Download File">
+                                    <!-- Download button -->
+                                    <a href="{{ route('admin.download', $idea->ideaId ?? $idea->id) }}" class="btn btn-sm btn-outline-primary" title="Download File">
                                         <i class="bi bi-download"></i>
                                     </a>
 
-                                    <form action="{{ route('admin.deleteIdea', $idea->ideaId) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn XÓA VĨNH VIỄN bài đăng này cùng các dữ liệu/file liên quan không?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Idea">
-                                            <i class="bi bi-trash3"></i>
-                                        </button>
-                                    </form>
+                                    <!-- Delete button -->
+                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteConfirmModal"
+                                            data-delete-url="{{ route('admin.deleteIdea', $idea->ideaId ?? $idea->id) }}"
+                                            title="Delete Idea">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -96,4 +91,49 @@
         </div>
     </div>
 </div>
+
+<!-- Delete confirmation -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 15px;">
+            <div class="modal-header bg-danger border-0" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                <h5 class="modal-title fw-bold text-white" id="deleteConfirmModalLabel">
+                    <i class="bi bi-exclamation-octagon-fill me-2"></i> System Confirmation
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="bi bi-trash3 text-danger mb-3" style="font-size: 4rem;"></i>
+                <h5 class="text-dark fw-bold mb-3">Are you sure you want to PERMANENTLY DELETE this idea?</h5>
+                <p class="text-muted mb-0" style="font-size: 0.95rem;">This action will remove all associated data, documents, and comments. <strong class="text-danger">This cannot be undone!</strong></p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4 gap-3">
+                <button type="button" class="btn btn-light px-4 rounded-pill fw-bold" data-bs-dismiss="modal">Cancel</button>
+
+
+                <form id="deleteForm" method="POST" action="">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger px-4 rounded-pill fw-bold shadow-sm">Yes, Delete It</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script for delete url -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var deleteModal = document.getElementById('deleteConfirmModal');
+    if (deleteModal) {
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var deleteUrl = button.getAttribute('data-delete-url');
+            var deleteForm = deleteModal.querySelector('#deleteForm');
+            deleteForm.setAttribute('action', deleteUrl);
+        });
+    }
+});
+</script>
 @endsection

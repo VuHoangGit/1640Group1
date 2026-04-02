@@ -8,7 +8,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QACoordinatorController;
 use App\Http\Controllers\QAManagerController;
 
-
 // --- CÁC ROUTE CÔNG KHAI (Dành cho khách chưa đăng nhập) ---
 Route::middleware('guest')->group(function () {
     // Trang chủ & Đăng nhập
@@ -21,7 +20,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/newPassword', [PortalController::class, 'newPassword'])->name('newPassword');
     Route::post('/resetPassword', [PortalController::class, 'resetPassword'])->name('passwordReset');
 });
-
 
 // CÁC ROUTE ĐƯỢC BẢO VỆ (Bắt buộc phải đăng nhập)
 Route::middleware('auth')->group(function () {
@@ -68,9 +66,7 @@ Route::middleware('auth')->group(function () {
 
         // Chỉnh sửa bài viết (CRUD)
         Route::get('/my-submissions/edit/{id}', [StaffController::class, 'editIdea'])->name('staff.editIdea');
-        // Route xử lý cập nhật dữ liệu sau khi sửa
         Route::put('/my-submissions/update/{id}', [StaffController::class, 'updateIdea'])->name('staff.updateIdea');
-        // ------------------------------------------------------------------
 
         // Tương tác Social Media
         Route::get('/social-media', [StaffController::class, 'socialMedia'])->name('staff.socialMedia');
@@ -78,8 +74,14 @@ Route::middleware('auth')->group(function () {
         // Tải file
         Route::get('/download-idea/{id}', [StaffController::class, 'downloadIdea'])->name('staff.downloadIdea');
 
-        // Bấm Like / Dislike
+        // Bấm Like / Dislike (Javascript AJAX sẽ gọi vào đây)
         Route::post('/react-idea/{id}', [StaffController::class, 'react'])->name('staff.reactIdea');
+
+        // Gửi Comment
+        Route::post('/ideas/{ideaId}/comment', [StaffController::class, 'storeComment'])->name('comment.store');
+
+        // Đếm View
+        Route::post('/increment-view/{ideaId}', [StaffController::class, 'incrementView'])->name('staff.incrementView');
 
         // Thiết lập bảo mật
         Route::get('/authSetup', [StaffController::class, 'authSetup'])->name('staff.authSetup');
@@ -103,6 +105,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/authSetup', [StaffController::class, 'authQuestionSetup'])->name('createAuthAnswer');
     });
 
+    // --- MANAGER ROUTES ---
     Route::prefix('qa_manager')->group(function () {
         Route::get('/home', [QAManagerController::class, 'home'])->name('qa_manager.home');
 
@@ -114,9 +117,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/authSetup', [StaffController::class, 'authSetup'])->name('qa_manager.authSetup');
         Route::post('/authSetup', [StaffController::class, 'authQuestionSetup'])->name('qa_manager.createAuthAnswer');
     });
-
-
-
 
     // Quản lý câu hỏi bảo mật (Xem/Sửa)
     Route::get('/security-questions', [PortalController::class, 'showSecurityQuestions'])->name('securityQuestions');
@@ -132,5 +132,4 @@ Route::middleware('auth')->group(function () {
 
     // Đăng xuất
     Route::post('/logout', [PortalController::class, 'logout'])->name('logout');
-
 });
