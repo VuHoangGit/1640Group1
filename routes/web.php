@@ -95,6 +95,8 @@ Route::middleware('auth')->group(function () {
         // Quản lý category
         Route::get('/categoryManagement', [QACoordinatorController::class, 'categoryManagement'])->name('qa_coordinator.categoryManagement');
         Route::get('/deleteCategory/{categoryId}', [QACoordinatorController::class, 'deleteCategory'])->name('qa_coordinator.deleteCategory');
+        Route::get('/newCategory', [QACoordinatorController::class, 'newCategory'])->name('qa_coordinator.newCategory');
+        Route::post('/newCategory', [QACoordinatorController::class, 'createNewCategory'])->name('createNewCategory');
 
         // Quản lý Idea của phòng ban
         Route::get('/ideaManagement', [QACoordinatorController::class, 'ideaManagement'])->name('qa_coordinator.ideaManagement');

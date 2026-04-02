@@ -204,7 +204,7 @@ class PortalController extends Controller
 
         $role = strtolower($user->role);
         if ($role === 'admin') {
-            return redirect()->route('admin.home')->with('success', 'Password changed successfully!');
+            return redirect()->route('admin.dashboard')->with('success', 'Password changed successfully!');
         }
         return redirect()->route('staff.home')->with('success', 'Password changed successfully!');
     }
@@ -280,7 +280,7 @@ class PortalController extends Controller
 
         $role = strtolower($user->role);
         if ($role === 'admin') {
-            return redirect()->route('admin.home')->with('success', 'Security question updated successfully!');
+            return redirect()->route('admin.dashboard')->with('success', 'Security question updated successfully!');
         }
         return redirect()->route('staff.home')->with('success', 'Security question updated successfully!');
     }
