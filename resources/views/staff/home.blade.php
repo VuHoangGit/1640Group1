@@ -5,7 +5,7 @@
 
     <div class="bg-primary text-white p-4 rounded-3 mb-4 shadow-sm" style="background: linear-gradient(45deg, #2b99d6, #5ab7e6) !important;">
         <h3 class="fw-bold">Welcome back, {{ Auth::user()->fullName ?? Auth::user()->username ?? 'Staff' }}! 👋</h3>
-        <p class="mb-0">Ready to share your brilliant ideas with the community?</p>
+        <p class="mb-0"> Ready to share your brilliant ideas with the community?</p>
     </div>
 
     <div class="row g-4 mb-4">
