@@ -24,7 +24,7 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <h6 class="text-muted fw-bold mb-2">GLOBAL ENGAGEMENT </h6>
+                    <h6 class="text-muted fw-bold mb-2"> GLOBAL ENGAGEMENT </h6>
                     <h2 class="fw-bold text-dark mb-3">85%</h2>
                     <div class="progress" style="height: 6px;">
                         <div class="progress-bar bg-primary" style="width: 85%"></div>
