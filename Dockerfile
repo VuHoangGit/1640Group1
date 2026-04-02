@@ -8,11 +8,12 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libonig-dev \
     libxml2-dev \
-    libzip-dev \
     zip \
-    && docker-php-ext-install pdo pdo_pgsql mbstring bcmath zip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-install \
+    pdo \
+    pdo_pgsql \
+    mbstring \
+    bcmath
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
