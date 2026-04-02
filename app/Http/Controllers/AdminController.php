@@ -225,4 +225,48 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Idea and related files have been deleted successfully.');
     }
+    // Download idea as ZIP
+    public function downloadIdea($id)
+    {
+        // Take information
+        $idea = \App\Models\Idea::with(['user', 'category'])->findOrFail($id);
+
+        // create ZipArchive
+        $zip = new \ZipArchive();
+
+        // Name the ZIP file
+        $zipFileName = 'Idea_' . $id . '_' . time() . '.zip';
+        $zipFilePath = storage_path('app/public/' . $zipFileName);
+
+        // Open the ZIP file to create a new one.
+        if ($zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === TRUE) {
+
+            // Place the attached files (PDF, DOCX) inside the ZIP archive.
+            if (!empty($idea->filePath) && \Illuminate\Support\Facades\Storage::disk('public')->exists($idea->filePath)) {
+                $documentPath = storage_path('app/public/' . $idea->filePath);
+                $extension = pathinfo($documentPath, PATHINFO_EXTENSION);
+                $zip->addFile($documentPath, 'Attachment.' . $extension);
+            }
+
+            // Create a Text file (.txt) containing the Idea content.
+            $authorName = $idea->is_anonymous ? 'Anonymous Staff' : ($idea->user->fullName ?? 'Unknown Staff');
+            $categoryName = $idea->category->name ?? 'N/A';
+
+            $ideaDetails = "IDEA DETAILS\n";
+            $ideaDetails .= "=================================\n";
+            $ideaDetails .= "Title: " . $idea->title . "\n";
+            $ideaDetails .= "Category: " . $categoryName . "\n";
+            $ideaDetails .= "Author: " . $authorName . "\n";
+            $ideaDetails .= "Submitted Date: " . $idea->created_at->format('d/m/Y H:i:s') . "\n";
+            $ideaDetails .= "=================================\n";
+            $ideaDetails .= "Description:\n" . $idea->description . "\n";
+
+            $zip->addFromString('Idea_Details.txt', $ideaDetails);
+            $zip->close();
+        } else {
+            return back()->with('error', 'Lỗi: Không thể tạo file ZIP.');
+        }
+
+        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+    }
 }

@@ -16,10 +16,9 @@ class IdeaSeeder extends Seeder
     public function run(): void
     {
         // Xóa dữ liệu cũ
-        \Schema::disableForeignKeyConstraints();
-         \App\Models\Comment::truncate(); // Nếu lỗi ở đây, hãy comment dòng này lại tạm thời
-        \App\Models\Idea::truncate();
-        \Schema::enableForeignKeyConstraints();
+        DB::statement('TRUNCATE TABLE reactions RESTART IDENTITY CASCADE');
+        DB::statement('TRUNCATE TABLE comments RESTART IDENTITY CASCADE');
+        DB::statement('TRUNCATE TABLE ideas RESTART IDENTITY CASCADE');
 
         $staffIds = User::where('role', 'Staff')->pluck('userId')->toArray();
 

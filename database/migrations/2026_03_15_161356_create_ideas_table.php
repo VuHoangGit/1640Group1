@@ -18,7 +18,12 @@ return new class extends Migration
             $table->foreignId('userId')->constrained('users', 'userId'); // Người đăng (Staff)
             $table->foreignId('categoryId')->constrained('categories', 'categoryId'); // Thuộc danh mục nào
             $table->string('filePath'); // Đường dẫn file word/pdf lưu trên server
+            $table->boolean('is_anonymous')->default(false);
+            $table->integer('views')->default(0);
             $table->timestamps();
+
+
+
         });
     }
 
