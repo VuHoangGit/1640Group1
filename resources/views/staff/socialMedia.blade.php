@@ -2,388 +2,334 @@
 
 @section('content')
 <style>
-    .page-title {
+    .topic-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .topic-title {
         font-size: 1.9rem;
         font-weight: 700;
         color: #0f172a;
+        margin: 0;
     }
 
-    .section-card {
+    .sort-select {
+        min-width: 180px;
+        border: 1px solid #dbe4f0 !important;
+        border-radius: 12px !important;
+        min-height: 46px;
+        box-shadow: none !important;
+    }
+
+    .sort-select:focus {
+        border-color: #2b99d6 !important;
+        box-shadow: 0 0 0 4px rgba(43, 153, 214, 0.10) !important;
+    }
+
+    .idea-post-card {
         border: 0;
         border-radius: 22px;
         box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
         overflow: hidden;
-        background: #fff;
     }
 
-    .submit-header {
-        background: linear-gradient(135deg, #2b99d6 0%, #63b8e8 100%);
-        color: #fff;
-        padding: 22px 24px;
-    }
-
-    .submit-header h5 {
-        margin: 0;
-        font-weight: 700;
-    }
-
-    .submit-header p {
-        margin: 8px 0 0;
-        opacity: 0.96;
-        font-size: 14px;
-    }
-
-    .card-body-spacing {
+    .idea-post-body {
         padding: 24px;
     }
 
-    .form-label-custom {
-        font-weight: 700;
-        color: #334155;
-        margin-bottom: 10px;
+    .avatar-badge {
+        width: 45px;
+        height: 45px;
+        font-weight: bold;
+        background-color: #e83e8c;
+        flex-shrink: 0;
     }
 
-    .form-control,
-    .form-select {
-        min-height: 52px;
-        border-radius: 14px;
-        border: 1px solid #dbe4f0;
-        box-shadow: none !important;
+    .download-btn {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+    }
+
+    .post-title-link {
+        color: #2b99d6;
+        text-decoration: none;
+    }
+
+    .reaction-wrap {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .comment-box {
         background: #f8fafc;
-    }
-
-    textarea.form-control {
-        min-height: 120px;
-        resize: vertical;
-    }
-
-    .form-control:focus,
-    .form-select:focus {
-        border-color: #2b99d6;
-        background: #fff;
-        box-shadow: 0 0 0 4px rgba(43, 153, 214, 0.10) !important;
-    }
-
-    .anonymous-box {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 16px;
-        padding: 14px 16px;
-    }
-
-    .submit-btn {
-        min-height: 54px;
-        border-radius: 999px;
-        font-size: 1rem;
-        font-weight: 700;
-        border: none;
-    }
-
-    .history-title {
-        font-weight: 700;
-        color: #0f172a;
-    }
-
-    .table thead th {
-        background: #f8fafc;
-        color: #475569;
-        font-size: 14px;
-        font-weight: 700;
-        border-bottom: 1px solid #e9eef5;
-        white-space: nowrap;
-    }
-
-    .table tbody td {
-        vertical-align: middle;
-    }
-
-    .history-card-mobile {
-        border: 1px solid #e9eef5;
-        border-radius: 18px;
         padding: 16px;
+        border-radius: 14px;
+    }
+
+    .comment-scroll {
+        max-height: 250px;
+        overflow-y: auto;
+    }
+
+    .comment-item {
         background: #fff;
-        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+        padding: 10px 12px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05);
     }
 
-    .history-card-mobile + .history-card-mobile {
-        margin-top: 14px;
+    .comment-textarea {
+        min-height: 44px;
     }
 
-    .mobile-label {
-        font-size: 12px;
-        font-weight: 700;
-        color: #64748b;
-        margin-bottom: 4px;
-        text-transform: uppercase;
-        letter-spacing: 0.3px;
+    .pagination-container nav {
+        display: inline-block;
     }
 
-    .mobile-value {
-        font-size: 14px;
-        color: #0f172a;
-        word-break: break-word;
-    }
-
-    .tips-card {
-        border: 0;
-        border-radius: 22px;
-        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-        top: 20px;
-    }
-
-    .tips-inner {
-        background: #f8fafc;
-        padding: 24px;
-    }
-
-    .tips-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    @media (max-width: 991.98px) {
-        .page-title {
-            font-size: 1.5rem;
+    @media (max-width: 767.98px) {
+        .topic-title {
+            font-size: 1.45rem;
         }
 
-        .submit-header,
-        .card-body-spacing,
-        .tips-inner {
+        .idea-post-body {
             padding: 18px;
+        }
+
+        .reaction-wrap {
+            justify-content: stretch !important;
+        }
+
+        .reaction-wrap .btn {
+            flex: 1 1 calc(50% - 6px);
+        }
+
+        .download-btn {
+            width: 38px;
+            height: 38px;
         }
     }
 
     @media (max-width: 575.98px) {
-        .section-card,
-        .tips-card {
+        .topic-header {
+            align-items: stretch;
+        }
+
+        .sort-select {
+            width: 100% !important;
+        }
+
+        .idea-post-card {
             border-radius: 16px;
         }
 
-        .page-title {
-            font-size: 1.35rem;
+        .idea-post-body {
+            padding: 14px;
         }
 
-        .submit-btn {
-            min-height: 50px;
-            font-size: 0.95rem;
+        .reaction-wrap .btn {
+            flex: 1 1 100%;
         }
     }
 </style>
 
 <div class="container-fluid py-4">
-    <h3 class="page-title mb-4"><i class="bi bi-cloud-upload text-primary me-2"></i>My Submissions</h3>
+    <div class="topic-header mb-4">
+        <h3 class="topic-title"><i class="bi bi-globe2 text-primary me-2"></i>Topic List</h3>
 
-    <div class="row g-4">
+        <form action="{{ url()->current() }}" method="GET">
+            <div class="d-flex justify-content-end align-items-center">
+                <select name="sort" class="form-select w-auto shadow-sm sort-select" onchange="this.form.submit()">
+                    <option value="latest" {{ $sort == 'latest' ? 'selected' : '' }}>Latest Ideas</option>
+                    <option value="popular" {{ $sort == 'popular' ? 'selected' : '' }}>Most Popular</option>
+                    <option value="viewed" {{ $sort == 'viewed' ? 'selected' : '' }}>Most Viewed</option>
+                    <option value="comments" {{ $sort == 'comments' ? 'selected' : '' }}>Latest Comment</option>
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <div class="row justify-content-center">
         <div class="col-12 col-xl-8">
-            <div class="section-card mb-4">
-                <div class="submit-header">
-                    <h5><i class="bi bi-plus-circle me-2"></i>Submit New Idea</h5>
-                    <p>Create and upload a new idea with its description, category, and document attachment.</p>
-                </div>
+            @forelse($ideas as $idea)
+                <div class="card idea-post-card mb-4 idea-card" data-idea-id="{{ $idea->ideaId ?? $idea->id }}">
+                    <div class="card-body idea-post-body">
 
-                <div class="card-body-spacing">
-                    <form action="{{ url('/staff/submit-idea') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
+                        <div class="d-flex justify-content-between align-items-start gap-3 mb-3 flex-wrap">
+                            <div class="d-flex align-items-start flex-grow-1">
+                                <div class="rounded-circle text-white d-flex justify-content-center align-items-center avatar-badge">
+                                    {{ $idea->is_anonymous ? 'AN' : strtoupper(substr($idea->user->fullName ?? 'U', 0, 2)) }}
+                                </div>
 
-                        <div class="mb-3">
-                            <label class="form-label-custom">Idea Title</label>
-                            <input type="text" name="title" class="form-control" placeholder="Enter a brief title" required>
-                        </div>
+                                <div class="ms-3 text-start">
+                                    <h6 class="fw-bold mb-0 text-dark">
+                                        {{ $idea->is_anonymous ? 'Anonymous Staff' : ($idea->user->fullName ?? 'Unknown Staff') }}
+                                    </h6>
 
-                        <div class="mb-3">
-                            <label class="form-label-custom">Description</label>
-                            <textarea name="description" class="form-control" rows="4" placeholder="Explain your idea..." required></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label-custom">Select Category</label>
-                            <select name="category_id" class="form-select" required>
-                                <option value="">-- Choose a category --</option>
-                                @foreach($categories as $cat)
-                                    <option value="{{ $cat->categoryId ?? $cat->id }}">{{ $cat->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label-custom">Document Attachment</label>
-                            <input type="file" name="document" class="form-control" accept=".pdf,.doc,.docx" required>
-                        </div>
-
-                        <div class="anonymous-box mb-4">
-                            <div class="form-check mb-0">
-                                <input class="form-check-input" type="checkbox" name="is_anonymous" id="anonymousIdea" style="cursor: pointer;">
-                                <label class="form-check-label fw-semibold ms-1" for="anonymousIdea" style="cursor: pointer;">
-                                    Submit as Anonymous
-                                    <small class="text-muted fw-normal">(Hide my name from other users)</small>
-                                </label>
+                                    <div class="d-flex align-items-center flex-wrap gap-2 mt-1">
+                                        <small class="text-muted">Submitted {{ $idea->created_at->diffForHumans() }}</small>
+                                        <small class="text-muted">
+                                            <i class="bi bi-eye"></i> <span id="view-count-{{ $idea->ideaId ?? $idea->id }}">{{ $idea->views ?? 0 }}</span>
+                                        </small>
+                                    </div>
+                                </div>
                             </div>
+
+                            <a href="{{ route('staff.downloadIdea', $idea->ideaId ?? $idea->id) }}"
+                               class="btn btn-primary rounded-circle shadow-sm d-flex justify-content-center align-items-center download-btn"
+                               title="Download Attached File">
+                                <i class="bi bi-download"></i>
+                            </a>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100 submit-btn">
-                            <i class="bi bi-cloud-arrow-up me-2"></i>Upload Idea Now
-                        </button>
-                    </form>
-                </div>
-            </div>
+                        <h4 class="fw-bold mb-2 text-start">
+                            <a href="#" class="post-title-link">{{ $idea->title }}</a>
+                        </h4>
 
-            <h5 class="history-title mb-3"><i class="bi bi-clock-history text-secondary me-2"></i>My Submission History</h5>
+                        <p class="text-muted text-start mb-1">{{ $idea->description }}</p>
+                        <p class="text-muted text-start small mb-3">Category: <span class="fw-bold">{{ $idea->category->name ?? 'Idea' }}</span></p>
 
-            <div class="section-card d-none d-lg-block">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle text-center mb-0">
-                        <thead>
-                            <tr>
-                                <th class="py-3">No.</th>
-                                <th class="py-3 text-start">Idea Title</th>
-                                <th class="py-3">Category</th>
-                                <th class="py-3">Status</th>
-                                <th class="py-3">Submitted Date</th>
-                                <th class="py-3">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($myIdeas as $index => $idea)
+                        @php
+                            $deadline = \Carbon\Carbon::parse($idea->created_at)->endOfWeek();
+                            $isOpen = now()->lessThanOrEqualTo($deadline);
+                        @endphp
+
+                        <div class="d-flex justify-content-center border-top pt-3 mt-3 reaction-container reaction-wrap" data-idea-id="{{ $idea->ideaId ?? $idea->id }}">
+                            <button class="btn btn-react btn-{{ (isset($myReactions[$idea->ideaId ?? $idea->id]) && $myReactions[$idea->ideaId ?? $idea->id] == true) ? 'primary' : 'outline-primary' }} rounded-pill px-4" data-action="upvote" {{ !$isOpen ? 'disabled' : '' }}>
+                                <i class="bi {{ (isset($myReactions[$idea->ideaId ?? $idea->id]) && $myReactions[$idea->ideaId ?? $idea->id] == true) ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up' }} me-2"></i>
+                                <span class="upvote-count text-dark fw-bold">{{ $idea->upvotes_count ?? 0 }}</span>
+                            </button>
+
+                            <button class="btn btn-react btn-{{ (isset($myReactions[$idea->ideaId ?? $idea->id]) && $myReactions[$idea->ideaId ?? $idea->id] == false) ? 'danger' : 'outline-danger' }} rounded-pill px-4" data-action="downvote" {{ !$isOpen ? 'disabled' : '' }}>
+                                <i class="bi {{ (isset($myReactions[$idea->ideaId ?? $idea->id]) && $myReactions[$idea->ideaId ?? $idea->id] == false) ? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down' }} me-2"></i>
+                                <span class="downvote-count text-dark fw-bold">{{ $idea->downvotes_count ?? 0 }}</span>
+                            </button>
+                        </div>
+
+                        <div class="text-muted mt-2 small">Close vote on Sunday ({{ $deadline->format('d/m/Y') }})</div>
+
+                        <div class="text-start mt-4 comment-box">
+                            <h6 class="fw-bold border-bottom pb-2 mb-3"><i class="bi bi-chat-dots me-2"></i>Comments</h6>
+
+                            <div class="mb-3 comment-scroll">
                                 @php
-                                    $deadline = \Carbon\Carbon::parse($idea->created_at)->endOfWeek();
-                                    $isOpen = now()->lessThanOrEqualTo($deadline);
+                                    $comments = \App\Models\Comment::where('ideaId', $idea->ideaId ?? $idea->id)->orderBy('created_at', 'asc')->get();
                                 @endphp
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td class="text-start fw-bold text-primary">{{ $idea->title }}</td>
-                                    <td>{{ $idea->category->name ?? 'N/A' }}</td>
-                                    <td>
-                                        @if($isOpen)
-                                            <span class="badge bg-success">Open</span>
-                                        @else
-                                            <span class="badge bg-danger">Closed</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $idea->created_at->format('d/m/Y') }}</td>
-                                    <td>
-                                        @if($isOpen)
-                                            <a href="{{ route('staff.editIdea', $idea->ideaId ?? $idea->id) }}" class="btn btn-sm btn-outline-primary rounded-circle" title="Edit Idea">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
-                                        @else
-                                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle" title="Locked" data-bs-toggle="modal" data-bs-target="#closedPostModal">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted py-4">You haven't submitted any ideas yet.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
-            <div class="d-lg-none">
-                @forelse($myIdeas as $index => $idea)
-                    @php
-                        $deadline = \Carbon\Carbon::parse($idea->created_at)->endOfWeek();
-                        $isOpen = now()->lessThanOrEqualTo($deadline);
-                    @endphp
-
-                    <div class="history-card-mobile">
-                        <div class="row g-3 align-items-center">
-                            <div class="col-6">
-                                <div class="mobile-label">No.</div>
-                                <div class="mobile-value fw-semibold">{{ $index + 1 }}</div>
+                                @forelse($comments as $comment)
+                                    <div class="comment-item mb-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-1 gap-2 flex-wrap">
+                                            <strong class="{{ $comment->is_anonymous ? 'text-secondary' : 'text-primary' }}" style="font-size: 0.9rem;">
+                                                {{ $comment->is_anonymous ? 'Anonymous' : ($comment->user->fullName ?? 'Staff') }}
+                                            </strong>
+                                            <small class="text-muted" style="font-size: 0.75rem;">{{ $comment->created_at->diffForHumans() }}</small>
+                                        </div>
+                                        <p class="mb-0 text-dark text-break" style="font-size: 0.9rem;">{!! nl2br(e($comment->content)) !!}</p>
+                                    </div>
+                                @empty
+                                    <div class="text-muted small">No comments yet. Be the first to share your thoughts!</div>
+                                @endforelse
                             </div>
 
-                            <div class="col-6 text-end">
-                                @if($isOpen)
-                                    <span class="badge bg-success">Open</span>
-                                @else
-                                    <span class="badge bg-danger">Closed</span>
-                                @endif
-                            </div>
-
-                            <div class="col-12">
-                                <div class="mobile-label">Idea Title</div>
-                                <div class="mobile-value fw-semibold text-primary">{{ $idea->title }}</div>
-                            </div>
-
-                            <div class="col-12 col-sm-6">
-                                <div class="mobile-label">Category</div>
-                                <div class="mobile-value">{{ $idea->category->name ?? 'N/A' }}</div>
-                            </div>
-
-                            <div class="col-12 col-sm-6">
-                                <div class="mobile-label">Submitted Date</div>
-                                <div class="mobile-value">{{ $idea->created_at->format('d/m/Y') }}</div>
-                            </div>
-
-                            <div class="col-12">
-                                @if($isOpen)
-                                    <a href="{{ route('staff.editIdea', $idea->ideaId ?? $idea->id) }}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                                        <i class="bi bi-pencil me-1"></i>Edit Idea
-                                    </a>
-                                @else
-                                    <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#closedPostModal">
-                                        <i class="bi bi-lock me-1"></i>Locked
-                                    </button>
-                                @endif
-                            </div>
+                            <form action="{{ route('comment.store', $idea->ideaId ?? $idea->id) }}" method="POST">
+                                @csrf
+                                <div class="input-group mb-2 shadow-sm border-0" style="border-radius: 10px;">
+                                    <textarea name="content" class="form-control border-0 bg-white comment-textarea" rows="1" placeholder="Write a comment... (Press Enter to send, Shift+Enter for new line)" required style="resize: none;"></textarea>
+                                    <button class="btn btn-primary" type="submit"><i class="bi bi-send"></i></button>
+                                </div>
+                                <div class="form-check text-end">
+                                    <input class="form-check-input float-none" type="checkbox" name="is_anonymous" id="anon_cmt_{{ $idea->ideaId ?? $idea->id }}">
+                                    <label class="form-check-label text-muted" for="anon_cmt_{{ $idea->ideaId ?? $idea->id }}" style="font-size: 0.85rem; cursor: pointer;">
+                                        Comment Anonymously
+                                    </label>
+                                </div>
+                            </form>
                         </div>
-                    </div>
-                @empty
-                    <div class="section-card text-center text-muted py-4 px-3">
-                        You haven't submitted any ideas yet.
-                    </div>
-                @endforelse
-            </div>
-        </div>
 
-        <div class="col-12 col-xl-4">
-            <div class="card tips-card sticky-xl-top">
-                <div class="tips-inner">
-                    <h6 class="fw-bold text-primary mb-3"><i class="bi bi-lightbulb me-2"></i>Quick Tips</h6>
-
-                    <div class="tips-item mb-3">
-                        <i class="bi bi-check-circle text-success mt-1"></i>
-                        <div>
-                            <p class="fw-bold text-dark mb-1" style="font-size: 0.95rem;">Effective Submission</p>
-                            <p class="text-muted mb-0" style="font-size: 0.85rem;">Make sure your file is formatted correctly and doesn't exceed 10MB to ensure smooth processing.</p>
-                        </div>
-                    </div>
-
-                    <hr class="text-secondary">
-
-                    <div class="text-center mt-4 mb-2">
-                        <i class="bi bi-shield-check text-success mb-2" style="font-size: 3rem;"></i>
-                        <h6 class="fw-bold text-dark">Secure Portal</h6>
-                        <p class="text-muted" style="font-size: 0.85rem;">Your documents are encrypted and safely stored.</p>
                     </div>
                 </div>
+            @empty
+                <div class="alert alert-info text-center shadow-sm border-0 rounded-4">No ideas found. Be the first to submit one!</div>
+            @endforelse
+
+            <div class="d-flex justify-content-center mt-4 pagination-container">
+                {{ $ideas->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="closedPostModal" tabindex="-1" aria-labelledby="closedPostModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius: 15px;">
-            <div class="modal-header bg-warning border-0" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                <h5 class="modal-title fw-bold text-dark" id="closedPostModalLabel">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> Action Restricted
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center py-5">
-                <i class="bi bi-lock text-secondary mb-3" style="font-size: 3rem;"></i>
-                <h5 class="text-dark">This post is closed and cannot be edited anymore.</h5>
-            </div>
-            <div class="modal-footer border-0 justify-content-center pb-4">
-                <button type="button" class="btn btn-secondary px-5 rounded-pill" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.btn-react').on('click', function(e) {
+        e.preventDefault();
+        var button = $(this);
+        if (button.prop('disabled')) return;
+        button.prop('disabled', true);
+
+        var action = button.data('action');
+        var container = button.closest('.reaction-container');
+        var ideaId = container.data('idea-id');
+
+        var reactUrl = '{{ url("/staff/react-idea") }}/' + ideaId;
+
+        $.ajax({
+            url: reactUrl,
+            type: 'POST',
+            data: { _token: '{{ csrf_token() }}', action: action },
+            success: function(response) { window.location.reload(); },
+            error: function(xhr) {
+                button.prop('disabled', false);
+                if (xhr.status === 403) alert(xhr.responseJSON.message || 'Hết thời gian đánh giá bài viết này!');
+                else if (xhr.status === 401) alert('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+            }
+        });
+    });
+
+    $('.comment-textarea').on('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            if ($(this).val().trim() !== '') {
+                form.submit();
+            }
+        }
+    });
+
+    if ('IntersectionObserver' in window) {
+        let viewObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    let card = $(entry.target);
+                    let ideaId = card.data('idea-id');
+
+                    $.ajax({
+                        url: '{{ url("/staff/increment-view") }}/' + ideaId,
+                        type: 'POST',
+                        data: { _token: '{{ csrf_token() }}' },
+                        success: function(response) {
+                            if(response.success) {
+                                let viewCountElement = $('#view-count-' + ideaId);
+                                let currentCount = parseInt(viewCountElement.text()) || 0;
+                                viewCountElement.text(currentCount + 1);
+                            }
+                        }
+                    });
+
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        $('.idea-card').each(function() {
+            viewObserver.observe(this);
+        });
+    }
+});
+</script>
 @endsection
