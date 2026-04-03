@@ -30,7 +30,7 @@
 </style>
 
 <div class="container-fluid px-0">
-    <h2 class="admin-page-title text-center mb-4">Topic Management</h2>
+    <h2 class="admin-page-title text-center mb-4">Topic Management </h2>
 
     <div class="card table-card">
         <div class="card-body p-0">
