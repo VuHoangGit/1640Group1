@@ -4,158 +4,484 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Password | Academic Portal</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #e9f2ff;
-            height: 100vh;
+            background: #f4f7fe;
+            margin: 0;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0;
+            padding: 24px;
+            -webkit-text-size-adjust: 100%;
         }
 
-        .login-container {
-            background: white;
-            border-radius: 15px;
+        img,
+        svg,
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        input,
+        select,
+        textarea,
+        .form-control,
+        .form-select {
+            font-size: 16px !important;
+        }
+
+        .auth-shell {
+            width: 100%;
+            max-width: 1120px;
+        }
+
+        .auth-card {
+            background: #fff;
+            border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 1000px;
-            width: 95%;
-            min-height: 550px;
+            box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
         }
 
-        /* Sidebar trái */
-        .login-sidebar {
-            background-color: #f0f7ff;
+        .auth-row {
+            min-height: 680px;
+        }
+
+        .auth-visual {
+            background: linear-gradient(180deg, #eef5ff 0%, #f7fbff 100%);
+            padding: 36px 32px;
+            position: relative;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-            position: relative;
+            justify-content: space-between;
+            height: 100%;
         }
 
         .back-button {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 24px;
+            left: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #ffffff;
+            color: #2b99d6;
             text-decoration: none;
-            color: #333;
-            font-size: 24px;
-            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 6px 16px rgba(43, 153, 214, 0.14);
+            transition: 0.2s ease;
         }
 
-        .illustration {
-            max-width: 85%;
-            height: auto;
+        .back-button:hover {
+            background: #2b99d6;
+            color: #fff;
         }
 
-        /* Section Form */
-        .login-form-section {
-            padding: 50px 60px;
+        .visual-brand {
+            padding-top: 70px;
         }
 
-        .university-url {
-            text-align: right;
-            font-size: 0.8rem;
-            color: #888;
-            margin-bottom: 30px;
-        }
-
-        .form-control {
-            border: none;
-            border-bottom: 2px solid #eee;
-            border-radius: 0;
-            padding: 10px 0;
-            box-shadow: none !important;
-        }
-
-        .form-control:focus {
-            border-bottom-color: #3498db;
-        }
-
-        .form-control.is-invalid {
-            border-bottom-color: #dc3545;
-        }
-
-        .btn-change {
-            background-color: #2b99d6;
-            border: none;
-            padding: 12px;
-            border-radius: 5px;
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #2b99d6;
             font-weight: 600;
-            margin-top: 30px;
-            transition: 0.3s;
+            font-size: 14px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
         }
 
-        .btn-change:hover {
-            background-color: #217db3;
-            transform: translateY(-2px);
+        .visual-title {
+            font-size: 2rem;
+            line-height: 1.25;
+            font-weight: 700;
+            color: #162033;
+            margin: 22px 0 12px;
+        }
+
+        .visual-desc {
+            color: #6b7280;
+            font-size: 15px;
+            max-width: 420px;
+            margin-bottom: 24px;
+        }
+
+        .visual-illustration-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0 0;
+        }
+
+        .visual-illustration {
+            max-width: 90%;
+            width: 100%;
+            max-height: 360px;
+            object-fit: contain;
+        }
+
+        .auth-form {
+            padding: 44px 52px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .top-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .portal-text {
+            color: #8b95a7;
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+        .mini-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: #2b99d6;
+            font-size: 14px;
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #162033;
+            margin-bottom: 10px;
+        }
+
+        .auth-subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 4px;
+            word-break: break-word;
         }
 
         .instruction-text {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 30px;
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+
+        .alert {
+            border: 0;
+            border-radius: 14px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-label-custom {
+            display: block;
+            margin-bottom: 10px;
+            color: #6b7280;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            border: 1px solid #dbe4f0;
+            background: #fff;
+            border-radius: 14px;
+            min-height: 52px;
+            padding: 12px 16px;
+            color: #111827;
+            box-shadow: none !important;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: #2b99d6;
+            box-shadow: 0 0 0 4px rgba(43, 153, 214, 0.10) !important;
+        }
+
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+
+        .btn-submit {
+            width: 100%;
+            border: none;
+            background: #2b99d6;
+            color: #fff;
+            min-height: 52px;
+            border-radius: 14px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            margin-top: 8px;
+            transition: 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background: #217db3;
+            transform: translateY(-1px);
+        }
+
+        .bottom-link {
+            text-align: center;
+            margin-top: 22px;
+        }
+
+        .bottom-link a {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .bottom-link a:hover {
+            color: #2b99d6;
+        }
+
+        @media (max-width: 991.98px) {
+            body {
+                padding: 18px;
+                align-items: stretch;
+            }
+
+            .auth-card {
+                border-radius: 20px;
+            }
+
+            .auth-row {
+                min-height: auto;
+            }
+
+            .auth-visual {
+                padding: 32px 24px 20px;
+            }
+
+            .visual-brand {
+                padding-top: 62px;
+            }
+
+            .visual-title {
+                font-size: 1.7rem;
+            }
+
+            .auth-form {
+                padding: 36px 28px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            body {
+                padding: 0;
+                display: block;
+            }
+
+            .auth-shell {
+                max-width: 100%;
+            }
+
+            .auth-card {
+                min-height: 100dvh;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .auth-visual {
+                padding: 24px 18px 18px;
+            }
+
+            .back-button {
+                top: 18px;
+                left: 18px;
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .visual-brand {
+                padding-top: 56px;
+            }
+
+            .brand-badge {
+                font-size: 13px;
+                padding: 8px 14px;
+            }
+
+            .visual-title {
+                font-size: 1.45rem;
+                margin-top: 18px;
+            }
+
+            .visual-desc {
+                font-size: 14px;
+                margin-bottom: 18px;
+            }
+
+            .visual-illustration {
+                max-width: 78%;
+                max-height: 240px;
+            }
+
+            .auth-form {
+                padding: 24px 18px 30px;
+            }
+
+            .top-meta {
+                margin-bottom: 22px;
+                gap: 10px;
+            }
+
+            .auth-title {
+                font-size: 1.55rem;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .auth-visual {
+                padding: 22px 14px 16px;
+            }
+
+            .auth-form {
+                padding: 22px 14px 28px;
+            }
+
+            .top-meta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .portal-text {
+                text-align: left;
+            }
+
+            .visual-illustration {
+                max-width: 85%;
+            }
+
+            .form-group {
+                margin-bottom: 18px;
+            }
+
+            .form-control,
+            .btn-submit {
+                min-height: 50px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="auth-shell">
+        <div class="auth-card">
+            <div class="row g-0 auth-row">
+                <div class="col-lg-6 auth-visual">
+                    <a href="{{ route('login') }}" class="back-button" title="Back to Login">
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
 
-<div class="login-container">
-    <div class="row g-0">
-        <div class="col-md-6 login-sidebar d-none d-md-flex">
-            <a href="{{ route('login') }}" class="back-button" title="Back to Login">‹</a>
-            <img src="https://cdni.iconscout.com/illustration/premium/thumb/forgot-password-4268397-3551717.png" alt="Reset Password Illustration" class="illustration">
-        </div>
+                    <div class="visual-brand">
+                        <div class="brand-badge">
+                            <i class="bi bi-key-fill"></i>
+                            Academic Portal
+                        </div>
 
-        <div class="col-md-6 login-form-section">
-            <div class="university-url">🌐 www.universityname.ac.in</div>
+                        <h1 class="visual-title">Create a secure new password for your account</h1>
+                        <p class="visual-desc">
+                            Use a strong password that is different from previously used passwords to keep your account protected.
+                        </p>
+                    </div>
 
-            <div class="mb-4">
-                <h3 class="fw-bold mb-2">Create new password</h3>
-                <p class="instruction-text">Your new password must be different from previous used passwords.</p>
+                    <div class="visual-illustration-wrap">
+                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/forgot-password-4268397-3551717.png" alt="Reset Password Illustration" class="visual-illustration">
+                    </div>
+                </div>
+
+                <div class="col-lg-6 auth-form">
+                    <div class="top-meta">
+                        <div class="mini-brand">
+                            <i class="bi bi-mortarboard-fill"></i>
+                            ACADEMIC
+                        </div>
+                        <div class="portal-text">🌐 www.universityname.ac.in</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="auth-title">Create new password</h2>
+                        <p class="instruction-text">Your new password must be different from previous used passwords.</p>
+                    </div>
+
+                    @if($errors->any())
+                        <div class="alert alert-danger py-3 mb-3" role="alert">
+                            <ul class="mb-0 ps-3">
+                                @foreach($errors->all() as $error)
+                                    <li style="margin-bottom: 4px;">{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('passwordReset') }}" method="POST">
+                        @csrf
+
+                        <div class="form-group">
+                            <label class="form-label-custom">New password</label>
+                            <input
+                                type="password"
+                                name="newPassword"
+                                class="form-control @error('newPassword') is-invalid @enderror"
+                                placeholder="Enter new password"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label-custom">Verify Password</label>
+                            <input
+                                type="password"
+                                name="verifyPassword"
+                                class="form-control @error('verifyPassword') is-invalid @enderror"
+                                placeholder="Re-enter new password"
+                                required
+                            >
+                        </div>
+
+                        <button type="submit" class="btn-submit">Change Password</button>
+
+                        <div class="bottom-link">
+                            <a href="{{ route('loginPage') }}">Back to Login</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            @if($errors->any())
-                <div class="alert alert-danger py-2 mb-3" role="alert">
-                    <ul class="mb-0" style="padding-left: 15px; font-size: 14px;">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form action="{{ route('passwordReset') }}" method="POST">
-                @csrf
-                <div class="mb-4">
-                    <label class="text-muted small fw-bold">New password</label>
-                    <input type="password" name="newPassword"
-                        class="form-control @error('newPassword') is-invalid @enderror"
-                        placeholder="Enter new password" required>
-                </div>
-
-                <div class="mb-4">
-                    <label class="text-muted small fw-bold">Verify Password</label>
-                    <input type="password" name="verifyPassword"
-                        class="form-control @error('verifyPassword') is-invalid @enderror"
-                        placeholder="Re-enter new password" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100 btn-change text-uppercase">Change Password</button>
-
-                <div class="text-center mt-4">
-                    <a href="{{ route('loginPage') }}" class="text-decoration-none text-muted small">Back to Login</a>
-                </div>
-            </form>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
