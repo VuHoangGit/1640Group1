@@ -1,55 +1,112 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .admin-page-title {
+        font-weight: 700;
+        color: #1f2937;
+    }
 
-<div class="container-fluid">
+    .table-card {
+        border: 0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
 
-    <h2 class="text-center fw-bold mb-4">Update User</h2>
+    .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
 
-    <form action="{{ route('updateUser',$user->userId) }}" method="POST">
-        @csrf
+    .table thead th {
+        white-space: nowrap;
+    }
 
-        <div class="row">
-            <div class="col-md-6 mb-2">
-                <label>Username (Login ID)</label>
-                <input type="text" name="username" class="form-control" value="{{ $user->username }}" readonly style="background-color: bisque">
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    @media (max-width: 767.98px) {
+        .admin-page-title {
+            font-size: 1.3rem;
+        }
+
+        .table {
+            font-size: 0.92rem;
+        }
+
+        .action-buttons .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container-fluid px-0">
+    <div class="toolbar mb-4">
+        <h2 class="admin-page-title text-center text-sm-start mb-0">Staff Management</h2>
+        <a href="{{ route('admin.newUser') }}" class="btn btn-primary">
+            <i class="bi bi-person-plus-fill me-1"></i> Create New User
+        </a>
+    </div>
+
+    <div class="card table-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered text-center align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Email</th>
+                            <th>Accept terms</th>
+                            <th>Question 1</th>
+                            <th>Question 2</th>
+                            <th>Question 3</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach($users as $user)
+                        <tr>
+                            <td>{{ $user->userId }}</td>
+                            <td>{{ $user->fullName }}</td>
+                            <td>{{ $user->role }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->acceptTerms }}</td>
+                            <td>{{ $user->favorite_animal }}</td>
+                            <td>{{ $user->favorite_color }}</td>
+                            <td>{{ $user->child_birth_year }}</td>
+                            <td>
+                                @if ($user->role != 'Admin')
+                                <div class="action-buttons">
+                                    <a href="{{ route('admin.updateUser', $user->userId) }}" class="btn btn-success btn-sm">
+                                        Update Account
+                                    </a>
+
+                                    <a href="{{ route('admin.deleteUser', $user->userId) }}"
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Delete this account will delete all associated ideas and votes. Continue?');">
+                                        Delete Account
+                                    </a>
+                                </div>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+
+                </table>
             </div>
-            <div class="col-md-6 mb-2">
-                <label>Full Name</label>
-                <input type="text" name="fullName" class="form-control" value="{{ $user->fullName }}" readonly style="background-color: bisque">
-            </div>
         </div>
-
-        <div class="mb-2">
-            <label>Email Address</label>
-            <input type="email" name="email" class="form-control" value="{{ $user->email }}" readonly style="background-color: bisque">
-        </div>
-
-        <div class="mb-2">
-            <label>Password</label>
-            <input type="password" name="password" class="form-control" placeholder="Leave empty if no change">
-        </div>
-
-        <div class="mb-2">
-            <input type="checkbox" name="resetQuestion">
-            <label>Reset Authentication Questions</label>
-        </div>
-
-        <div class="mb-2">
-            <label>Assign Role</label>
-            <select name="role" class="form-select {{ $errors->has('role') ? 'is-invalid' : '' }}" required>
-                <option value="" disabled selected>Select a role</option>
-                <option value="Staff" {{ $user->role == 'Staff' ? 'selected' : '' }}>Staff</option>
-                <option value="QACoordinator" {{ $user->role == 'QACoordinator' ? 'selected' : '' }}>QA Coordinator</option>
-                <option value="QAManager" {{ $user->role == 'QAManager' ? 'selected' : '' }}>QA Manager</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary w-100 btn-create">Update Account</button>
-
-        <div class="text-center mt-3">
-            <a href="{{ route('admin.staffManagement') }}" class="text-decoration-none text-muted small">Cancel and go back</a>
-        </div>
-
+    </div>
 </div>
 @endsection

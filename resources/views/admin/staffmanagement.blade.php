@@ -1,66 +1,62 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .admin-page-title {
+        font-weight: 700;
+        color: #1f2937;
+    }
 
-<div class="container-fluid">
+    .table-card {
+        border: 0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
 
-    <h2 class="text-center fw-bold mb-4">Staff Management</h2>
+    .table thead th {
+        white-space: nowrap;
+    }
 
-    <a href="{{ route('admin.newUser') }}">Create new User   </a>
-    <div class="card shadow-sm border-0">
-        <div class="card-body">
+    @media (max-width: 767.98px) {
+        .admin-page-title {
+            font-size: 1.3rem;
+        }
 
-            <table class="table table-bordered text-center align-middle">
+        .table {
+            font-size: 0.92rem;
+        }
+    }
+</style>
 
-                <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Role</th>
-                        <th>Email</th>
-                        <th>Accept terms</th>
-                        <th>Question 1</th>
-                        <th>Question 2</th>
-                        <th>Question 3</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
+<div class="container-fluid px-0">
+    <h2 class="admin-page-title text-center mb-4">Topic Management</h2>
 
-                <tbody>
-                    <!-- Data will be loaded from database -->
-                    @foreach($users as $user)
-                    <tr>
-                        <th>{{ $user->userId }}</th>
-                        <th>{{ $user->fullName }}</th>
-                        <th>{{ $user->role }}</th>
-                        <th>{{ $user->email }}</th>
-                        <th>{{ $user->acceptTerms }}</th>
-                        <th>{{ $user->favorite_animal }}</th>
-                        <th>{{ $user->favorite_color }}</th>
-                        <th>{{ $user->child_birth_year }}</th>
-                        <th>
-                            @if ($user->role!='Admin')
-                            {{-- Update Button --}}
-                            <a href="{{ route('admin.updateUser',$user->userId) }}" class="btn btn-success">
-                            Update Account
-                            </a>
+    <div class="card table-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered text-center align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Topic</th>
+                            <th>Author</th>
+                            <th>Thumbup</th>
+                            <th>Thumbdown</th>
+                        </tr>
+                    </thead>
 
-                            {{-- Delete Button --}}
-                            <a href="{{ route('admin.deleteUser',$user->userId) }}" class="btn btn-danger"
-                            onclick="return confirm('Delete this account will delete all associated ideas and votes. Continue?');">
-                            Delete Account
-                            </a>
-                            @endif
-                        </th>
-                    </tr>
-                    @endforeach
-                </tbody>
-
-            </table>
-
+                    <tbody>
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox display-6 d-block mb-3 opacity-50"></i>
+                                Data will be loaded from database.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-
 </div>
-
 @endsection
