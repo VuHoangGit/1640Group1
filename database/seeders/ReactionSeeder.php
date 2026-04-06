@@ -6,55 +6,31 @@ use Illuminate\Database\Seeder;
 use App\Models\Reaction;
 use App\Models\Idea;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class ReactionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-
-
-        DB::statement('TRUNCATE TABLE reactions RESTART IDENTITY CASCADE');
-
-
         $ideaIds = Idea::pluck('ideaId')->toArray();
         $userIds = User::pluck('userId')->toArray();
-        $totalUsers = count($userIds);
 
-
-        if (empty($ideaIds) || $totalUsers === 0) {
-            $this->command->warn('No Ideas or Users found in database. Please seed them first.');
+        if (empty($ideaIds) || empty($userIds)) {
             return;
         }
 
-        $this->command->info("Starting to seed reactions for $totalUsers users...");
-
         foreach ($ideaIds as $ideaId) {
+            // Lấy ngẫu nhiên từ 2 đến 5 người dùng để vote cho bài này
+            $voterCount = rand(2, min(5, count($userIds)));
+            $voters = (array) array_rand(array_flip($userIds), $voterCount);
 
-            $minVoters = 1;
-            $maxVoters = min(25, $totalUsers);
-
-            $voterCount = rand($minVoters, $maxVoters);
-
-
-            $randomKeys = array_rand(array_flip($userIds), $voterCount);
-
-
-            $voterIds = is_array($randomKeys) ? $randomKeys : [$randomKeys];
-
-            foreach ($voterIds as $voterId) {
+            foreach ($voters as $voterId) {
                 Reaction::create([
-                    'ideaId'    => $ideaId,
-                    'userId'    => $voterId,
-
-                    'is_upvote' => (rand(1, 10) <= 8)
+                    'ideaId' => $ideaId,
+                    'userId' => $voterId,
+                    // Random 70% cơ hội là Upvote (true), 30% là Downvote (false)
+                    'is_upvote' => (rand(1, 10) <= 7)
                 ]);
             }
         }
-
-        $this->command->info("Success! ReactionSeeder has finished seeding.");
     }
 }

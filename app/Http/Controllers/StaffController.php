@@ -7,22 +7,20 @@ use App\Models\User;
 use App\Models\Idea;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use App\Models\Reaction;
-use App\Models\Comment;
 
 class StaffController extends Controller
 {
-    //Home staff
     public function home() {
-        $userId = Auth::id();
-        // Total idea
-        $totalIdeas = Idea::where('userId', $userId)->count();
+        $userId = \Illuminate\Support\Facades\Auth::id();
 
-        // Total vote
-        $totalMyVotes = Reaction::where('userId', $userId)->count();
+        // Display total ideals from staff
+        $totalIdeas = \App\Models\Idea::where('userId', $userId)->count();
 
-        // Total interaction
-        $totalSystemIdeas = Idea::count();
+        // 2. Display total Vote from staff
+        $totalMyVotes = \App\Models\Reaction::where('userId', $userId)->count();
+
+        // 3. GLOBAL ENGAGEMENT: % Interaction
+        $totalSystemIdeas = \App\Models\Idea::count(); // Total number of articles across the entire system
 
         $engagementPercentage = 0;
         if ($totalSystemIdeas > 0) {
@@ -34,25 +32,21 @@ class StaffController extends Controller
         return view('staff.home', compact('totalIdeas', 'totalMyVotes', 'engagementPercentage'));
     }
 
-    //List of my submission
     public function mySubmissions() {
         $categories = \App\Models\Category::all();
         $myIdeas = Idea::where('userId', Auth::id())->orderBy('created_at', 'desc')->get();
         return view('staff.mySubmissions', compact('categories', 'myIdeas'));
     }
 
-    //Check & setup auth question
     public function authSetup(){
-        $user = Auth::user();
-
-        // Check active_security_question -> return home
-        if ($user && !empty($user->active_security_question)) {
+        $user = User::find(Auth::id());
+        // Kiểm tra nếu đã có active_security_question thì không cần setup lại
+        if (!empty($user->active_security_question)) {
             return redirect()->route('staff.home');
         }
         return view('staff.authSetup');
     }
 
-    //Auth question
     public function authQuestionSetup(Request $request){
         $request->validate([
             'security_question' => ['required', 'in:favorite_animal,favorite_color,child_birth_year'],
@@ -60,24 +54,18 @@ class StaffController extends Controller
             'term'              => ['required']
         ]);
 
-        $user = Auth::user();
+        $user = User::find(Auth::id());
 
         if ($user) {
-            $user->favorite_animal = null;
-            $user->favorite_color = null;
-            $user->child_birth_year = null;
-
-            $user->{$request->security_question} = $request->answer;
-            $user->active_security_question      = $request->security_question;
+            $user->{$request->security_question}  = $request->answer;
+            $user->active_security_question        = $request->security_question;
             $user->save();
-
             return redirect()->route('staff.home')->with('success', 'Security question set up successfully!');
         }
 
         return redirect()->route('loginPage');
     }
 
-    // New idea
     public function storeIdea(Request $request)
     {
         $request->validate([
@@ -97,119 +85,38 @@ class StaffController extends Controller
             $path = $request->file('document')->store('ideas', 'public');
             $idea->filePath = $path;
         }
-        $idea->is_anonymous = $request->has('is_anonymous');
+
         $idea->save();
 
         return redirect()->route('staff.mySubmissions')->with('success', 'Idea submitted successfully!');
     }
 
-    // Sort of Social Media
-    public function socialMedia(Request $request)
+    public function socialMedia()
     {
-        // Get the sort variable from the URL
-        $sort = $request->query('sort');
-
-        // Initialize Query Builder (withCount modified to match the interface)
-        $query = Idea::with(['user', 'category'])
+        $ideas = \App\Models\Idea::with('user')
             ->withCount([
-                'reactions as upvotes_count' => function ($q) { $q->where('is_upvote', true); },
-                'reactions as downvotes_count' => function ($q) { $q->where('is_upvote', false); }
-            ]);
+                'reactions as upvotes' => function ($query) { $query->where('is_upvote', true); },
+                'reactions as downvotes' => function ($query) { $query->where('is_upvote', false); }
+            ])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        // Handling sorting cases
-        if ($sort === 'popular') {
-            $query->orderByRaw('(
-                (SELECT COUNT(*) FROM reactions WHERE reactions."ideaId" = ideas."ideaId" AND is_upvote = true) -
-                (SELECT COUNT(*) FROM reactions WHERE reactions."ideaId" = ideas."ideaId" AND is_upvote = false)
-            ) DESC');
-        } elseif ($sort === 'viewed') {
-            $query->orderBy('views', 'desc');
-        } elseif ($sort === 'comments') {
-            // Prioritize the newest comment -> create time of the idea
-            $query->orderByRaw('GREATEST(
-                COALESCE((SELECT MAX(created_at) FROM comments WHERE comments."ideaId" = ideas."ideaId"), ideas.created_at),
-                ideas.created_at
-            ) DESC');
-        } else {
-            $query->orderBy('created_at', 'desc');
-        }
+        $myReactions = \App\Models\Reaction::where('userId', Auth::id())->pluck('is_upvote', 'ideaId')->toArray();
 
-        // 4. Thực thi truy vấn và phân trang
-        $ideas = $query->paginate(5)->withQueryString();
-        $myReactions = Reaction::where('userId', Auth::id())->pluck('is_upvote', 'ideaId')->toArray();
-
-        return view('staff.socialMedia', compact('ideas', 'myReactions', 'sort'));
+        return view('staff.socialMedia', compact('ideas', 'myReactions'));
     }
 
-    //Save comment
-    public function storeComment(Request $request, $ideaId)
-    {
-        $request->validate([
-            'content' => 'required|string|max:1000'
-        ]);
-
-        Comment::create([
-            'ideaId' => $ideaId,
-            'userId' => Auth::id(),
-            'content' => (string) $request->input('content'),
-            'is_anonymous' => $request->has('is_anonymous')
-        ]);
-
-        return redirect()->back()->with('success', 'Your comment has been posted!');
-    }
-
-    // Download idea as ZIP
     public function downloadIdea($id)
     {
-        // Take information
-        $idea = Idea::with(['user', 'category'])->findOrFail($id);
-
-        //  create ZipArchive
-        $zip = new \ZipArchive();
-        // Name the ZIP file
-
-        $zipFileName = 'Idea_' . $id . '_' . time() . '.zip';
-        $zipFilePath = storage_path('app/public/' . $zipFileName);
-
-        // Open the ZIP file to create a new one.
-        if ($zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === TRUE) {
-
-            // Place the attached files (PDF, DOCX) inside the ZIP archive.
-            if (!empty($idea->filePath) && \Illuminate\Support\Facades\Storage::disk('public')->exists($idea->filePath)) {
-                $documentPath = storage_path('app/public/' . $idea->filePath);
-                $extension = pathinfo($documentPath, PATHINFO_EXTENSION);
-                $zip->addFile($documentPath, 'Attachment.' . $extension);
-            }
-
-            // Create a Text file (.txt) containing the Idea content.
-            $authorName = $idea->is_anonymous ? 'Anonymous Staff' : ($idea->user->fullName ?? 'Unknown Staff');
-            $categoryName = $idea->category->name ?? 'N/A';
-
-            $ideaDetails = "IDEA DETAILS\n";
-            $ideaDetails .= "=================================\n";
-            $ideaDetails .= "Title: " . $idea->title . "\n";
-            $ideaDetails .= "Category: " . $categoryName . "\n";
-            $ideaDetails .= "Author: " . $authorName . "\n";
-            $ideaDetails .= "Submitted Date: " . $idea->created_at->format('d/m/Y H:i:s') . "\n";
-            $ideaDetails .= "=================================\n";
-            $ideaDetails .= "Description:\n" . $idea->description . "\n";
-
-            // Add this text to the ZIP file as Idea_Details.txt
-            $zip->addFromString('Idea_Details.txt', $ideaDetails);
-
-            // close zip
-            $zip->close();
-        } else {
-            return back()->with('error', 'Lỗi: Không thể tạo file ZIP.');
-        }
-
-        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+        $idea = \App\Models\Idea::findOrFail($id);
+        $path = storage_path('app/public/' . $idea->filePath);
+        return response()->download($path);
     }
 
-    //like/dislike
     public function react(Request $request, $id)
     {
-        $idea = Idea::findOrFail($id);
+        $idea = \App\Models\Idea::findOrFail($id);
+
         $deadline = Carbon::parse($idea->created_at)->endOfWeek();
 
         if (now()->greaterThan($deadline)) {
@@ -241,7 +148,7 @@ class StaffController extends Controller
         return response()->json(['upvotes' => $upvotes, 'downvotes' => $downvotes]);
     }
 
-    // Edit idea
+    // Display CRUD Ideals (Staff) & Check Deadline
     public function editIdea($id)
     {
         $idea = Idea::findOrFail($id);
@@ -261,7 +168,7 @@ class StaffController extends Controller
         return view('staff.editIdea', compact('idea', 'categories'));
     }
 
-    // Update idea
+    // Update Data after Edit/Update.
     public function updateIdea(Request $request, $id)
     {
         $idea = Idea::findOrFail($id);
@@ -298,17 +205,7 @@ class StaffController extends Controller
         }
 
         $idea->save();
-        return redirect()->route('staff.mySubmissions')->with('success', 'Updated successfully!');
-    }
 
-    // view
-    public function incrementView($ideaId)
-    {
-        $idea = Idea::find($ideaId);
-        if ($idea) {
-            $idea->increment('views');
-            return response()->json(['success' => true]);
-        }
-        return response()->json(['success' => false], 404);
+        return redirect()->route('staff.mySubmissions')->with('success', 'The idea has been updated successfully !');
     }
 }

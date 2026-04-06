@@ -17,8 +17,6 @@ class Idea extends Model
         'title',
         'description',
         'filePath',
-        'is_anonymous',
-        'views',
     ];
 
     public function user()
