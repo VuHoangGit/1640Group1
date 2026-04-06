@@ -42,7 +42,7 @@
                             </td>
 
                             <td class="text-center">
-                                <a href="{{ route('admin.deleteCategory',$category->categoryId) }}" class="btn btn-danger"
+                                <a href="{{ route('qa_coordinator.deleteCategory',$category->categoryId) }}" class="btn btn-danger"
                                 onclick="return confirm('Delete this category?');">
                                 Delete
                                 </a>
