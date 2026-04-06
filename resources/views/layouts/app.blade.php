@@ -10,58 +10,24 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        html, body {
-            width: 100%;
-            overflow-x: hidden;
-        }
-
         body {
             font-family: 'Inter', sans-serif;
             background: #f4f7fe;
             margin: 0;
             display: flex;
-            min-height: 100dvh;
-            -webkit-text-size-adjust: 100%;
-        }
-
-        img,
-        svg,
-        canvas {
-            max-width: 100%;
-            height: auto;
-        }
-
-        input,
-        select,
-        textarea,
-        .form-control,
-        .form-select {
-            font-size: 16px !important;
-        }
-
-        .table-responsive {
-            -webkit-overflow-scrolling: touch;
         }
 
         /* Sidebar */
         .sidebar {
             width: 280px;
-            min-width: 280px;
-            height: 100dvh;
+            height: 100vh;
             background: white;
             padding: 20px;
             position: fixed;
-            top: 0;
-            left: 0;
             box-shadow: 2px 0 10px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
             z-index: 1000;
-            overflow-y: auto;
         }
 
         .university-brand {
@@ -79,13 +45,11 @@
             display: flex;
             align-items: center;
             text-decoration: none;
-            word-break: break-word;
         }
 
         .nav-link i {
             margin-right: 12px;
             font-size: 1.2rem;
-            flex-shrink: 0;
         }
 
         .nav-link:hover,
@@ -99,7 +63,6 @@
             margin-left: 280px;
             padding: 40px;
             width: calc(100% - 280px);
-            min-width: 0;
         }
 
         .top-bar {
@@ -108,10 +71,9 @@
             align-items: center;
             margin-bottom: 30px;
             gap: 20px;
-            flex-wrap: wrap;
         }
 
-        /* Card */
+        /* card */
         .stat-card {
             background: white;
             padding: 25px;
@@ -139,7 +101,6 @@
             gap: 12px;
             cursor: pointer;
             user-select: none;
-            max-width: 100%;
         }
 
         .profile-img {
@@ -149,7 +110,6 @@
             object-fit: cover;
             border: 2px solid #2b99d6;
             transition: box-shadow 0.2s;
-            flex-shrink: 0;
         }
 
         .profile-wrapper:hover .profile-img {
@@ -160,7 +120,6 @@
             font-size: 12px;
             color: #adb5bd;
             transition: transform 0.2s;
-            flex-shrink: 0;
         }
 
         .profile-wrapper.open .profile-chevron {
@@ -187,9 +146,7 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        .profile-dropdown.show {
-            display: block;
-        }
+        .profile-dropdown.show { display: block; }
 
         .dropdown-header-info {
             padding: 14px 16px 10px;
@@ -201,14 +158,11 @@
             font-size: 14px;
             font-weight: 600;
             color: #1a1a1a;
-            word-break: break-word;
         }
 
         .dropdown-header-info small {
             color: #6c757d;
             font-size: 12px;
-            word-break: break-word;
-            display: block;
         }
 
         .dropdown-item-custom {
@@ -222,132 +176,15 @@
             transition: background 0.15s;
         }
 
-        .dropdown-item-custom:hover {
-            background: #f4f7fe;
-            color: #2b99d6;
-        }
-
-        .dropdown-item-custom i {
-            font-size: 16px;
-            width: 18px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .dropdown-item-custom.danger {
-            color: #dc3545;
-        }
-
-        .dropdown-item-custom.danger:hover {
-            background: #fff5f5;
-            color: #dc3545;
-        }
+        .dropdown-item-custom:hover { background: #f4f7fe; color: #2b99d6; }
+        .dropdown-item-custom i { font-size: 16px; width: 18px; text-align: center; }
+        .dropdown-item-custom.danger { color: #dc3545; }
+        .dropdown-item-custom.danger:hover { background: #fff5f5; color: #dc3545; }
 
         .dropdown-divider-custom {
             height: 0.5px;
             background: #f0f0f0;
             margin: 4px 0;
-        }
-
-        /* Tablet */
-        @media (max-width: 991.98px) {
-            body {
-                display: block;
-            }
-
-            .sidebar {
-                position: static;
-                width: 100%;
-                min-width: 100%;
-                height: auto;
-                box-shadow: none;
-                padding: 15px;
-                border-bottom: 1px solid #e9ecef;
-            }
-
-            .university-brand {
-                padding: 10px 5px 15px;
-                margin-bottom: 15px;
-            }
-
-            .main-content {
-                margin-left: 0;
-                width: 100%;
-                padding: 24px 20px;
-            }
-
-            .top-bar {
-                justify-content: space-between;
-                align-items: flex-start;
-                gap: 12px;
-            }
-
-            .profile-wrapper {
-                margin-left: auto;
-            }
-
-            .profile-dropdown {
-                right: 0;
-                left: auto;
-                min-width: 200px;
-            }
-        }
-
-        /* Mobile */
-        @media (max-width: 576px) {
-            .sidebar {
-                padding: 12px;
-            }
-
-            .nav-link {
-                font-size: 14px;
-                padding: 10px 12px;
-            }
-
-            .nav-link i {
-                font-size: 1rem;
-                margin-right: 10px;
-            }
-
-            .main-content {
-                padding: 16px 12px;
-            }
-
-            .top-bar {
-                margin-bottom: 20px;
-            }
-
-            .profile-wrapper {
-                gap: 8px;
-                width: 100%;
-                justify-content: flex-end;
-            }
-
-            .profile-wrapper .text-end {
-                max-width: 160px;
-            }
-
-            .profile-wrapper .text-end p,
-            .profile-wrapper .text-end small {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: block;
-            }
-
-            .profile-img {
-                width: 38px;
-                height: 38px;
-            }
-
-            .profile-dropdown {
-                min-width: 180px;
-                max-width: calc(100vw - 24px);
-            }
-
-            .stat-card {
-                padding: 18px;
-            }
         }
     </style>
 </head>
@@ -430,7 +267,7 @@
                     <small class="text-muted">Role: {{ Auth::user()->role ?? 'User' }}</small>
                 </div>
                 <img src="https://ui-avatars.com/api/?name={{ Auth::user()->fullName ?? Auth::user()->username ?? 'A' }}&background=2b99d6&color=fff"
-                     class="profile-img" alt="Profile">
+                     class="profile-img">
                 <span class="profile-chevron">&#8964;</span>
 
                 <div class="profile-dropdown" id="profileDropdown">
@@ -474,18 +311,16 @@
         const profileWrapper = document.getElementById('profileWrapper');
         const profileDropdown = document.getElementById('profileDropdown');
 
-        if (profileWrapper && profileDropdown) {
-            profileWrapper.addEventListener('click', function (e) {
-                e.stopPropagation();
-                profileWrapper.classList.toggle('open');
-                profileDropdown.classList.toggle('show');
-            });
+        profileWrapper.addEventListener('click', function (e) {
+            e.stopPropagation();
+            profileWrapper.classList.toggle('open');
+            profileDropdown.classList.toggle('show');
+        });
 
-            document.addEventListener('click', function () {
-                profileWrapper.classList.remove('open');
-                profileDropdown.classList.remove('show');
-            });
-        }
+        document.addEventListener('click', function () {
+            profileWrapper.classList.remove('open');
+            profileDropdown.classList.remove('show');
+        });
     </script>
 
 </body>
