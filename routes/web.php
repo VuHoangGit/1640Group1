@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
         // Quản lý người dùng
         Route::get('/newUser', [AdminController::class, 'newUser'])->name('admin.newUser');
         Route::post('/newUser', [AdminController::class, 'createNewUser'])->name('createNewUser');
-        Route::get('/staffManagement', [AdminController::class, 'staffmanagement'])->name('admin.staffManagement');
+        Route::get('/staffManagement', [AdminController::class, 'staffManagement'])->name('admin.staffManagement');
         Route::get('/updateUser/{userId}', [AdminController::class, 'viewUpdateUser'])->name('admin.updateUser');
         Route::post('/updateUser/{userId}', [AdminController::class, 'updateUser'])->name('updateUser');
         Route::get('/deleteUser/{userId}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
