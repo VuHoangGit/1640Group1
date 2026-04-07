@@ -251,7 +251,7 @@
                     <i class="bi bi-globe2"></i> Topic List
                 </a>
 
-                <a class="nav-link {{ request()->routeIs('qa_manager.staffmanagement') ? 'active' : '' }}" href="{{ route('qa_manager.staffManagement') }}">
+                <a class="nav-link {{ request()->routeIs('qa_manager.staffManagement') ? 'active' : '' }}" href="{{ route('qa_manager.staffManagement') }}">
                     <i class="bi bi-people"></i> Staff Management
                 </a>
             @endif

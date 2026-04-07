@@ -1,140 +1,204 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-.idea-card {
-    max-width: 500px;
-    margin: auto;
-    border-radius: 20px;
-}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0 text-dark"><i class="bi bi-globe2 text-primary"></i> Topic List</h3>
 
-.idea-card .card-body {
-    min-height: 300px;
-}
-</style>
-<div class="container-fluid">
-    <h3 class="fw-bold mb-4"><i class="bi bi-globe2"></i> Topic List</h3>
+        <form action="{{ url()->current() }}" method="GET">
+            <div class="d-flex justify-content-end align-items-center">
+                <select name="sort" class="form-select w-auto shadow-sm border-0" onchange="this.form.submit()" style="border-radius: 8px;">
+                    <option value="latest" {{ $sort == 'latest' ? 'selected' : '' }}>Latest Ideas</option>
+                    <option value="popular" {{ $sort == 'popular' ? 'selected' : '' }}>Most Popular</option>
+                    <option value="viewed" {{ $sort == 'viewed' ? 'selected' : '' }}>Most Viewed</option>
+                    <option value="comments" {{ $sort == 'comments' ? 'selected' : '' }}>Latest Comment</option>
+                </select>
+            </div>
+        </form>
+    </div>
 
     <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
+        <div class="col-md-8">
             @forelse($ideas as $idea)
-                <div class="card border-0 shadow-sm mb-4 rounded-4 idea-card">
+                <!-- Đã thêm data-idea-id vào card để JS dễ dàng lấy ID bài viết -->
+                <div class="card border-0 shadow-sm mb-4 idea-card" data-idea-id="{{ $idea->ideaId ?? $idea->id }}" style="border-radius: 15px;">
                     <div class="card-body p-4 text-center">
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <img src="https://ui-avatars.com/api/?name={{ $idea->user->fullName ?? 'U' }}&background=random" class="rounded-circle me-3" width="50" height="50">
-                                <div>
-                                    <h6 class="fw-bold mb-0 text-dark">{{ $idea->user->fullName ?? $idea->user->username ?? 'Unknown Staff' }}</h6>
-                                    <small class="text-muted">{{ $idea->created_at->diffForHumans() }}</small>
+                                <div class="rounded-circle text-white d-flex justify-content-center align-items-center"
+                                     style="width: 45px; height: 45px; font-weight: bold; background-color: #e83e8c;">
+                                    {{ $idea->is_anonymous ? 'AN' : strtoupper(substr($idea->user->fullName ?? 'U', 0, 2)) }}
+                                </div>
+                                <div class="ms-3 text-start">
+                                    <h6 class="fw-bold mb-0 text-dark">
+                                        {{ $idea->is_anonymous ? 'Anonymous Staff' : ($idea->user->fullName ?? 'Unknown Staff') }}
+                                    </h6>
+                                    <div class="d-flex align-items-center">
+                                        <small class="text-muted">Submitted {{ $idea->created_at->diffForHumans() }}</small>
+                                        <!-- ICON LƯỢT VIEW ĐƯỢC THÊM VÀO ĐÂY -->
+                                        <small class="text-muted ms-3">
+                                            <i class="bi bi-eye"></i> <span id="view-count-{{ $idea->ideaId ?? $idea->id }}">{{ $idea->views ?? 0 }}</span>
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
-                            <a href="{{ route('staff.downloadIdea', $idea->ideaId) }}" class="btn btn-primary rounded-circle shadow-sm" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;" title="Download File">
-                                <i class="bi bi-cloud-arrow-down-fill fs-5"></i>
+
+                            <a href="{{ route('staff.downloadIdea', $idea->ideaId ?? $idea->id) }}" class="btn btn-primary rounded-circle shadow-sm d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;" title="Download Attached File">
+                                <i class="bi bi-download"></i>
                             </a>
                         </div>
 
-                        <div class="mb-3">
-                            <h5 class="fw-bold text-primary">{{ $idea->title }}</h5>
-                            <p class="text-secondary mb-0" style="white-space: pre-wrap;">{{ $idea->description }}</p>
-                        </div>
+                        <h4 class="fw-bold text-primary mb-2 text-start">
+                            <a href="#" class="text-decoration-none">{{ $idea->title }}</a>
+                        </h4>
+                        <p class="text-muted text-start mb-1">{{ $idea->description }}</p>
+                        <p class="text-muted text-start small mb-3">Category: <span class="fw-bold">{{ $idea->category->name ?? 'Idea' }}</span></p>
 
                         @php
-                            $myVote = $myReactions[$idea->ideaId] ?? null;
                             $deadline = \Carbon\Carbon::parse($idea->created_at)->endOfWeek();
-                            $isVoteClosed = now()->greaterThan($deadline);
+                            $isOpen = now()->lessThanOrEqualTo($deadline);
                         @endphp
 
-                        <div class="mb-3">
-                            @if($isVoteClosed)
-                                <span class="badge bg-danger mb-1 px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-lock-fill"></i> Voting Closed</span>
-                                <small class="text-muted d-block" style="font-size: 0.75rem;">Ended at {{ $deadline->format('H:i - d/m/Y') }}</small>
-                            @else
-                                <span class="badge bg-success mb-1 px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-unlock-fill"></i> Voting Open</span>
-                                <small class="text-muted d-block" style="font-size: 0.75rem;">Closed on Sunday ({{ $deadline->format('d/m/Y') }})</small>
-                            @endif
+                        <div class="d-flex justify-content-center gap-3 border-top pt-3 mt-3 reaction-container" data-idea-id="{{ $idea->ideaId ?? $idea->id }}">
+
+                            <button class="btn btn-react btn-{{ (isset($myReactions[$idea->ideaId ?? $idea->id]) && $myReactions[$idea->ideaId ?? $idea->id] == true) ? 'primary' : 'outline-primary' }} rounded-pill px-4" data-action="upvote" {{ !$isOpen ? 'disabled' : '' }}>
+                                <i class="bi {{ (isset($myReactions[$idea->ideaId ?? $idea->id]) && $myReactions[$idea->ideaId ?? $idea->id] == true) ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up' }} me-2"></i>
+                                <span class="upvote-count text-dark fw-bold">{{ $idea->upvotes_count ?? 0 }}</span>
+                            </button>
+
+                            <button class="btn btn-react btn-{{ (isset($myReactions[$idea->ideaId ?? $idea->id]) && $myReactions[$idea->ideaId ?? $idea->id] == false) ? 'danger' : 'outline-danger' }} rounded-pill px-4" data-action="downvote" {{ !$isOpen ? 'disabled' : '' }}>
+                                <i class="bi {{ (isset($myReactions[$idea->ideaId ?? $idea->id]) && $myReactions[$idea->ideaId ?? $idea->id] == false) ? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down' }} me-2"></i>
+                                <span class="downvote-count text-dark fw-bold">{{ $idea->downvotes_count ?? 0 }}</span>
+                            </button>
                         </div>
+                        <div class="text-muted mt-2 small">Close vote on Sunday ({{ $deadline->format('d/m/Y') }})</div>
 
-                        <div class="d-flex justify-content-between mt-3">
-                            <button onclick="toggleReaction({{ $idea->ideaId }}, 'upvote', this)" class="btn {{ $myVote === true ? 'btn-primary' : 'btn-outline-secondary' }} w-50 me-2 rounded-pill btn-reaction" data-type="upvote" {{ $isVoteClosed ? 'disabled' : '' }}>
-                                <i class="bi {{ $myVote === true ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up' }} me-1"></i>
-                                <span class="vote-count">{{ $idea->upvotes }}</span>
-                            </button>
+                        <div class="text-start mt-4 bg-light p-3 rounded" style="border-radius: 10px;">
+                            <h6 class="fw-bold border-bottom pb-2 mb-3"><i class="bi bi-chat-dots"></i> Comments</h6>
 
-                            <button onclick="toggleReaction({{ $idea->ideaId }}, 'downvote', this)" class="btn {{ $myVote === false ? 'btn-danger' : 'btn-outline-secondary' }} w-50 ms-2 rounded-pill btn-reaction" data-type="downvote" {{ $isVoteClosed ? 'disabled' : '' }}>
-                                <i class="bi {{ $myVote === false ? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down' }} me-1"></i>
-                                <span class="vote-count">{{ $idea->downvotes }}</span>
-                            </button>
+                            <div class="mb-3" style="max-height: 250px; overflow-y: auto;">
+                                @php
+                                    $comments = \App\Models\Comment::where('ideaId', $idea->ideaId ?? $idea->id)->orderBy('created_at', 'asc')->get();
+                                @endphp
+                                @forelse($comments as $comment)
+                                    <div class="bg-white p-2 rounded shadow-sm mb-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <strong class="{{ $comment->is_anonymous ? 'text-secondary' : 'text-primary' }}" style="font-size: 0.9rem;">
+                                                {{ $comment->is_anonymous ? 'Anonymous' : ($comment->user->fullName ?? 'Staff') }}
+                                            </strong>
+                                            <small class="text-muted" style="font-size: 0.75rem;">{{ $comment->created_at->diffForHumans() }}</small>
+                                        </div>
+                                        <p class="mb-0 text-dark text-break" style="font-size: 0.9rem;">{!! nl2br(e($comment->content)) !!}</p>
+                                    </div>
+                                @empty
+                                    <div class="text-muted small">No comments yet. Be the first to share your thoughts!</div>
+                                @endforelse
+                            </div>
+
+                            <form action="{{ route('comment.store', $idea->ideaId ?? $idea->id) }}" method="POST">
+                                @csrf
+                                <div class="input-group mb-2 shadow-sm border-0" style="border-radius: 10px;">
+                                    <textarea name="content" class="form-control border-0 bg-white comment-textarea" rows="1" placeholder="Write a comment... (Press Enter to send, Shift+Enter for new line)" required style="resize: none;"></textarea>
+                                    <button class="btn btn-primary" type="submit"><i class="bi bi-send"></i></button>
+                                </div>
+                                <div class="form-check text-end">
+                                    <input class="form-check-input float-none" type="checkbox" name="is_anonymous" id="anon_cmt_{{ $idea->ideaId ?? $idea->id }}">
+                                    <label class="form-check-label text-muted" for="anon_cmt_{{ $idea->ideaId ?? $idea->id }}" style="font-size: 0.85rem; cursor: pointer;">
+                                        Comment Anonymously
+                                    </label>
+                                </div>
+                            </form>
                         </div>
 
                     </div>
                 </div>
             @empty
-                <div class="text-center py-5 text-muted">
-                    <i class="bi bi-inbox display-1"></i>
-                    <p class="mt-3">No ideas have been submitted yet.</p>
-                </div>
+                <div class="alert alert-info text-center shadow-sm">No ideas found. Be the first to submit one!</div>
             @endforelse
+
+            <div class="d-flex justify-content-center mt-4 pagination-container">
+                {{ $ideas->links('pagination::bootstrap-5') }}
+            </div>
         </div>
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function toggleReaction(ideaId, action, buttonElement) {
-        buttonElement.disabled = true;
+$(document).ready(function() {
+    // 1. Xử lý Like / Dislike
+    $('.btn-react').on('click', function(e) {
+        e.preventDefault();
+        var button = $(this);
+        if (button.prop('disabled')) return;
+        button.prop('disabled', true);
 
-        fetch(`/staff/react-idea/${ideaId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({ action: action })
-        })
-        .then(async response => {
-            if (!response.ok) {
-                let errData = await response.json();
-                // Báo lỗi bằng hộp thoại nếu cố tình can thiệp mã nguồn khi đã hết hạn
-                alert("🚫 " + (errData.message || "A system error has occurred!"));
-                throw new Error("Lỗi API");
+        var action = button.data('action');
+        var container = button.closest('.reaction-container');
+        var ideaId = container.data('idea-id');
+
+        var reactUrl = '{{ url("/staff/react-idea") }}/' + ideaId;
+
+        $.ajax({
+            url: reactUrl,
+            type: 'POST',
+            data: { _token: '{{ csrf_token() }}', action: action },
+            success: function(response) { window.location.reload(); },
+            error: function(xhr) {
+                button.prop('disabled', false);
+                if (xhr.status === 403) alert(xhr.responseJSON.message || 'Hết thời gian đánh giá bài viết này!');
+                else if (xhr.status === 401) alert('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
             }
-            return response.json();
-        })
-        .then(data => {
-            let container = buttonElement.parentElement;
-            let btnUp = container.querySelector('[data-type="upvote"]');
-            let btnDown = container.querySelector('[data-type="downvote"]');
+        });
+    });
 
-            btnUp.querySelector('.vote-count').innerText = data.upvotes;
-            btnDown.querySelector('.vote-count').innerText = data.downvotes;
-
-            if (action === 'upvote') {
-                if (btnUp.classList.contains('btn-primary')) {
-                    btnUp.classList.replace('btn-primary', 'btn-outline-secondary');
-                    btnUp.querySelector('i').classList.replace('bi-hand-thumbs-up-fill', 'bi-hand-thumbs-up');
-                } else {
-                    btnUp.classList.replace('btn-outline-secondary', 'btn-primary');
-                    btnUp.querySelector('i').classList.replace('bi-hand-thumbs-up', 'bi-hand-thumbs-up-fill');
-                    btnDown.classList.replace('btn-danger', 'btn-outline-secondary');
-                    btnDown.querySelector('i').classList.replace('bi-hand-thumbs-down-fill', 'bi-hand-thumbs-down');
-                }
-            } else {
-                if (btnDown.classList.contains('btn-danger')) {
-                    btnDown.classList.replace('btn-danger', 'btn-outline-secondary');
-                    btnDown.querySelector('i').classList.replace('bi-hand-thumbs-down-fill', 'bi-hand-thumbs-down');
-                } else {
-                    btnDown.classList.replace('btn-outline-secondary', 'btn-danger');
-                    btnDown.querySelector('i').classList.replace('bi-hand-thumbs-down', 'bi-hand-thumbs-down-fill');
-                    btnUp.classList.replace('btn-primary', 'btn-outline-secondary');
-                    btnUp.querySelector('i').classList.replace('bi-hand-thumbs-up-fill', 'bi-hand-thumbs-up');
-                }
+    // 2. Xử lý bấm Enter để gửi Comment
+    $('.comment-textarea').on('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            if ($(this).val().trim() !== '') {
+                form.submit();
             }
-            buttonElement.disabled = false;
-        })
-        .catch(error => {
-            // Không mở lại nút nếu bài đã bị khóa
+        }
+    });
+
+    // 3. TỰ ĐỘNG ĐẾM VIEW KHI CUỘN CHUỘT
+    // Sử dụng IntersectionObserver để theo dõi khi một Idea hiển thị trên màn hình
+    if ('IntersectionObserver' in window) {
+        let viewObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    let card = $(entry.target);
+                    let ideaId = card.data('idea-id');
+
+                    // Gửi request ngầm lên Server để tăng View
+                    $.ajax({
+                        url: '{{ url("/staff/increment-view") }}/' + ideaId,
+                        type: 'POST',
+                        data: { _token: '{{ csrf_token() }}' },
+                        success: function(response) {
+                            if(response.success) {
+                                // Tăng số View hiển thị trên giao diện thêm 1
+                                let viewCountElement = $('#view-count-' + ideaId);
+                                let currentCount = parseInt(viewCountElement.text()) || 0;
+                                viewCountElement.text(currentCount + 1);
+                            }
+                        }
+                    });
+
+                    // Quan trọng: Chỉ tăng 1 lần khi cuộn qua, sau đó ngừng theo dõi bài này
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 }); // Ngưỡng 0.5 nghĩa là bài viết phải hiện ít nhất 50% trên màn hình mới tính view
+
+        // Bắt đầu theo dõi tất cả các bài viết
+        $('.idea-card').each(function() {
+            viewObserver.observe(this);
         });
     }
+});
 </script>
 @endsection
