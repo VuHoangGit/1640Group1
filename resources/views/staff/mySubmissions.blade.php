@@ -3,6 +3,15 @@
 @section('content')
 <div class="container-fluid">
     <h3 class="fw-bold mb-4"><i class="bi bi-cloud-arrow-up"></i> My Submissions</h3>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">

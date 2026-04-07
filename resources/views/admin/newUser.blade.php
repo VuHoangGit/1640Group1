@@ -4,17 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New User | Academic Portal</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #e9f2ff;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0;
+            padding: 20px;
         }
 
         .login-container {
@@ -23,7 +26,7 @@
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             max-width: 1000px;
-            width: 95%;
+            width: 100%;
             min-height: 600px;
         }
 
@@ -35,6 +38,7 @@
             justify-content: center;
             padding: 40px;
             position: relative;
+            min-height: 100%;
         }
 
         .back-button {
@@ -63,16 +67,18 @@
             margin-bottom: 20px;
         }
 
-        .form-control, .form-select {
+        .form-control,
+        .form-select {
             border: none;
             border-bottom: 2px solid #eee;
             border-radius: 0;
-            padding: 8px 0;
+            padding: 10px 0;
             box-shadow: none !important;
             background: transparent;
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-bottom-color: #3498db;
         }
 
@@ -99,28 +105,65 @@
             color: #6c757d;
             margin-top: 15px;
         }
+
+        @media (max-width: 991.98px) {
+            .login-form-section {
+                padding: 32px 28px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            body {
+                display: block;
+                padding: 16px;
+            }
+
+            .login-container {
+                min-height: auto;
+                border-radius: 12px;
+            }
+
+            .login-form-section {
+                padding: 24px 20px;
+            }
+
+            .btn-create {
+                padding: 11px;
+                font-size: 14px;
+            }
+
+            .university-url {
+                text-align: left;
+                margin-bottom: 12px;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="login-container">
     <div class="row g-0">
-        <div class="col-md-6 login-sidebar d-none d-md-flex">
+        <div class="col-lg-6 login-sidebar d-none d-md-flex">
             <a href="{{ route('admin.dashboard') }}" class="back-button" title="Back to Dashboard">‹</a>
-            <img src="https://tse4.mm.bing.net/th/id/OIP.Vz3Ijf4o6TBKRvx2gZiqDwHaB2?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Illustration" class="illustration">
+            <img
+                src="https://tse4.mm.bing.net/th/id/OIP.Vz3Ijf4o6TBKRvx2gZiqDwHaB2?rs=1&pid=ImgDetMain&o=7&rm=3"
+                alt="Illustration"
+                class="illustration"
+            >
         </div>
 
-        <div class="col-md-6 login-form-section">
+        <div class="col-12 col-lg-6 login-form-section">
             <div class="university-url">🌐 Admin Panel</div>
 
             <div class="mb-4">
                 <h3 class="fw-bold mb-1">Add new account</h3>
-                <p class="text-muted small">Create a new profile in the system.</p>
+                <p class="text-muted small mb-0">Create a new profile in the system.</p>
             </div>
 
             @if(session('success'))
                 <div class="alert alert-success py-2">{{ session('success') }}</div>
             @endif
+
             @if($errors->any())
                 <div class="alert alert-danger py-2">
                     <ul class="mb-0 ps-3">
@@ -135,30 +178,58 @@
                 @csrf
 
                 <div class="row">
-                    <div class="col-md-6 mb-2">
+                    <div class="col-12 col-md-6 mb-2">
                         <label>Username (Login ID)</label>
-                        <input type="text" name="username" class="form-control" placeholder="Ex: trungbee" value="{{ old('username') }}" required>
+                        <input
+                            type="text"
+                            name="username"
+                            class="form-control"
+                            placeholder="Ex: trungbee"
+                            value="{{ old('username') }}"
+                            required
+                        >
                     </div>
-                    <div class="col-md-6 mb-2">
+
+                    <div class="col-12 col-md-6 mb-2">
                         <label>Full Name</label>
-                        <input type="text" name="fullName" class="form-control" placeholder="Ex: Nguyen Van Trung" value="{{ old('fullName') }}" required>
+                        <input
+                            type="text"
+                            name="fullName"
+                            class="form-control"
+                            placeholder="Ex: Nguyen Van Trung"
+                            value="{{ old('fullName') }}"
+                            required
+                        >
                     </div>
                 </div>
 
                 <div class="mb-2">
                     <label>Email Address</label>
-                    <input type="email" name="email" class="form-control" placeholder="example@university.edu" value="{{ old('email') }}" required>
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="example@university.edu"
+                        value="{{ old('email') }}"
+                        required
+                    >
                 </div>
 
                 <div class="mb-2">
                     <label>Initial Password</label>
-                    <input type="password" name="password" class="form-control" placeholder="Minimum 5 characters" required>
+                    <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="Minimum 5 characters"
+                        required
+                    >
                 </div>
 
-                <div class="mb-2">
+                <div class="mb-3">
                     <label>Assign Role</label>
                     <select name="role" class="form-select {{ $errors->has('role') ? 'is-invalid' : '' }}" required>
-                        <option value="" disabled selected>Select a role</option>
+                        <option value="" disabled {{ old('role') ? '' : 'selected' }}>Select a role</option>
                         <option value="Staff" {{ old('role') == 'Staff' ? 'selected' : '' }}>Staff</option>
                         <option value="QACoordinator" {{ old('role') == 'QACoordinator' ? 'selected' : '' }}>QA Coordinator</option>
                         <option value="QAManager" {{ old('role') == 'QAManager' ? 'selected' : '' }}>QA Manager</option>
@@ -166,10 +237,14 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100 btn-create">Create Account</button>
+                <button type="submit" class="btn btn-primary w-100 btn-create">
+                    Create Account
+                </button>
 
                 <div class="text-center mt-3">
-                    <a href="{{ route('admin.dashboard') }}" class="text-decoration-none text-muted small">Cancel and go back</a>
+                    <a href="{{ route('admin.dashboard') }}" class="text-decoration-none text-muted small">
+                        Cancel and go back
+                    </a>
                 </div>
             </form>
         </div>
