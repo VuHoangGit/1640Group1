@@ -186,6 +186,48 @@
             background: #f0f0f0;
             margin: 4px 0;
         }
+                /* Tablet */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+                padding: 25px;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                width: 250px;
+                height: 100%;
+                transition: 0.3s;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .top-bar {
+                justify-content: space-between;
+            }
+        }
     </style>
 </head>
 
@@ -261,6 +303,9 @@
     <div class="main-content">
 
         <div class="top-bar">
+            <button class="btn btn-light d-md-none" id="menuToggle">
+                <i class="bi bi-list"></i>
+            </button>
             <div class="profile-wrapper" id="profileWrapper">
                 <div class="text-end me-1">
                     <p class="mb-0 fw-bold small">{{ Auth::user()->fullName ?? Auth::user()->username ?? 'System Admin' }}</p>
@@ -308,6 +353,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.querySelector('.sidebar');
+
+        menuToggle.addEventListener('click', function () {
+            sidebar.classList.toggle('active');
+        });
         const profileWrapper = document.getElementById('profileWrapper');
         const profileDropdown = document.getElementById('profileDropdown');
 
