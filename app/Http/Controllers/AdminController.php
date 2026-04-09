@@ -108,7 +108,7 @@ class AdminController extends Controller
         return view('admin.socialmedia');
     }
 
-    public function staffmanagement()
+    public function staffManagement()
     {
         $users = User::all();
         return view('admin.staffManagement', compact('users'));
