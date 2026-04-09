@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\StaffController;
@@ -138,4 +139,12 @@ Route::middleware('auth')->group(function () {
     // --- LOGOUT ---
     Route::post('/logout', [PortalController::class, 'logout'])->name('logout');
 
+});
+Route::get('/health', function () {
+    try {
+        DB::connection()->getPdo();
+        return response()->json(['status' => 'ok'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error'], 500);
+    }
 });
