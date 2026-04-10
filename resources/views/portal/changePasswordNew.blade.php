@@ -142,7 +142,7 @@
                 <button type="submit" class="btn btn-primary w-100 btn-change text-uppercase">Save New Password</button>
 
                 <div class="text-center mt-4">
-                    @php $dashboardUrl = Auth::user()->role === 'Admin' ? route('admin.home') : route('staff.home'); @endphp
+                    @php $dashboardUrl = Auth::user()->role === 'Admin' ? route('admin.dashboard') : route('staff.home'); @endphp
                     <a href="{{ $dashboardUrl }}" class="text-decoration-none text-muted small">Cancel</a>
                 </div>
             </form>

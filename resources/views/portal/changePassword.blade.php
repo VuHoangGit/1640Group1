@@ -100,7 +100,7 @@
 <div class="login-container">
     <div class="row g-0">
         <div class="col-md-6 login-sidebar d-none d-md-flex">
-            @php $dashboardUrl = Auth::user()->role === 'Admin' ? route('admin.home') : route('staff.home'); @endphp
+            @php $dashboardUrl = Auth::user()->role === 'Admin' ? route('admin.dashboard') : route('staff.home'); @endphp
             <a href="{{ $dashboardUrl }}" class="back-button">‹</a>
             <img src="https://cdni.iconscout.com/illustration/premium/thumb/forgot-password-mobile-4268413-3551733.png" alt="Change Password Illustration" class="illustration">
         </div>
