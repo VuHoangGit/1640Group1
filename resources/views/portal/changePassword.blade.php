@@ -141,7 +141,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="text-muted small">Security question</label>
+                    <label class="text-muted small">Security question </label>
                     <select name="security_question"
                         class="form-control @error('security_question') is-invalid @enderror"
                         style="background-color: white; border: none; border-bottom: 2px solid #eee; border-radius: 0; padding: 10px 0;">
