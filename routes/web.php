@@ -8,6 +8,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QACoordinatorController;
 use App\Http\Controllers\QAManagerController;
+use Illuminate\Support\Facades\Auth;
 
 // CÁC ROUTE CÔNG KHAI (Dành cho khách chưa đăng nhập)
 Route::middleware('guest')->group(function () {
@@ -57,6 +58,13 @@ Route::middleware('auth')->group(function () {
             $path = storage_path('app/public/' . $idea->filePath);
             return response()->download($path);
         })->name('admin.download');
+        Route::get('/mark-as-read', function() {
+            $user = Auth::user();
+            if ($user) {
+                $user->unreadNotifications->markAsRead();
+            }
+            return back();
+        })->name('notifications.read');
     });
 
     // --- STAFF ROUTES ---
@@ -105,6 +113,13 @@ Route::middleware('auth')->group(function () {
         // Thiết lập câu hỏi bảo mật
         Route::get('/authSetup', [StaffController::class, 'authSetup'])->name('staff.authSetup');
         Route::post('/authSetup', [StaffController::class, 'authQuestionSetup'])->name('createAuthAnswer');
+        Route::get('/mark-as-read', function() {
+            $user = Auth::user();
+            if ($user) {
+                $user->unreadNotifications->markAsRead();
+            }
+            return back();
+        })->name('notifications.read');
     });
 
     Route::prefix('qa_manager')->group(function () {

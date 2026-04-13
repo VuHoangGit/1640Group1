@@ -303,6 +303,36 @@
     <div class="main-content">
 
         <div class="top-bar">
+            <li class="nav-item dropdown">
+                <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-bell"></i>
+                    @if(auth()->user()->unreadNotifications->count() > 0)
+                        <span class="badge bg-danger">{{ auth()->user()->unreadNotifications->count() }}</span>
+                    @endif
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" style="width: 300px;">
+                    <li class="dropdown-header">Notifications</li>
+
+                    @forelse(auth()->user()->unreadNotifications as $notification)
+                        <li>
+                            <a class="dropdown-item small" href="#">
+                                <strong>{{ $notification->data['user_name'] }}</strong>:
+                                {{ $notification->data['message'] }}
+                                <div class="text-muted" style="font-size: 0.75rem;">
+                                    {{ $notification->created_at->diffForHumans() }}
+                                </div>
+                            </a>
+                        </li>
+                    @empty
+                        <li class="dropdown-item text-center text-muted">No new notifications</li>
+                    @endforelse
+
+                    @if(auth()->user()->unreadNotifications->count() > 0)
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-center small text-primary" href="{{ route('notifications.read') }}">Mark all as read</a></li>
+                    @endif
+                </ul>
+            </li>
             <button class="btn btn-light d-md-none" id="menuToggle">
                 <i class="bi bi-list"></i>
             </button>

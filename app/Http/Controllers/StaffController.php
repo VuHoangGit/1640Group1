@@ -7,6 +7,9 @@ use App\Models\User;
 use App\Models\Idea;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use \App\Notifications\IdeaPosted;
+use Illuminate\Support\Facades\Notification;
+use Notifiable;
 
 class StaffController extends Controller
 {
@@ -87,6 +90,10 @@ class StaffController extends Controller
         }
 
         $idea->save();
+
+        $allUser = User::all();
+
+        Notification::send($allUser, new IdeaPosted($idea));
 
         return redirect()->route('staff.mySubmissions')->with('success', 'Idea submitted successfully!');
     }
