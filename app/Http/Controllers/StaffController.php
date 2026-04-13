@@ -10,6 +10,8 @@ use Carbon\Carbon;
 use \App\Notifications\IdeaPosted;
 use Illuminate\Support\Facades\Notification;
 use Notifiable;
+use App\Models\Reaction;
+use App\Models\Comment;
 
 class StaffController extends Controller
 {
@@ -98,21 +100,42 @@ class StaffController extends Controller
         return redirect()->route('staff.mySubmissions')->with('success', 'Idea submitted successfully!');
     }
 
-    public function socialMedia()
+public function socialMedia(Request $request)
     {
-        $ideas = \App\Models\Idea::with('user')
+        // Get the sort variable from the URL
+        $sort = $request->query('sort');
+
+        // Initialize Query Builder (withCount modified to match the interface)
+        $query = Idea::with(['user', 'category'])
             ->withCount([
-                'reactions as upvotes' => function ($query) { $query->where('is_upvote', true); },
-                'reactions as downvotes' => function ($query) { $query->where('is_upvote', false); }
-            ])
-            ->orderBy('created_at', 'desc')
-            ->get();
+                'reactions as upvotes_count' => function ($q) { $q->where('is_upvote', true); },
+                'reactions as downvotes_count' => function ($q) { $q->where('is_upvote', false); }
+            ]);
 
-        $myReactions = \App\Models\Reaction::where('userId', Auth::id())->pluck('is_upvote', 'ideaId')->toArray();
+        // Handling sorting cases
+        if ($sort === 'popular') {
+            $query->orderByRaw('(
+                (SELECT COUNT(*) FROM reactions WHERE reactions."ideaId" = ideas."ideaId" AND is_upvote = true) -
+                (SELECT COUNT(*) FROM reactions WHERE reactions."ideaId" = ideas."ideaId" AND is_upvote = false)
+            ) DESC');
+        } elseif ($sort === 'viewed') {
+            $query->orderBy('views', 'desc');
+        } elseif ($sort === 'comments') {
+            // Prioritize the newest comment -> create time of the idea
+            $query->orderByRaw('GREATEST(
+                COALESCE((SELECT MAX(created_at) FROM comments WHERE comments."ideaId" = ideas."ideaId"), ideas.created_at),
+                ideas.created_at
+            ) DESC');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
 
-        return view('staff.socialMedia', compact('ideas', 'myReactions'));
+        // 4. Thực thi truy vấn và phân trang
+        $ideas = $query->paginate(5)->withQueryString();
+        $myReactions = Reaction::where('userId', Auth::id())->pluck('is_upvote', 'ideaId')->toArray();
+
+        return view('staff.socialMedia', compact('ideas', 'myReactions', 'sort'));
     }
-
     public function downloadIdea($id)
     {
         $idea = \App\Models\Idea::findOrFail($id);
@@ -214,5 +237,21 @@ class StaffController extends Controller
         $idea->save();
 
         return redirect()->route('staff.mySubmissions')->with('success', 'The idea has been updated successfully !');
+    }
+
+    public function storeComment(Request $request, $ideaId)
+    {
+        $request->validate([
+            'content' => 'required|string|max:1000'
+        ]);
+
+        Comment::create([
+            'ideaId' => $ideaId,
+            'userId' => Auth::id(),
+            'content' => (string) $request->input('content'),
+            'is_anonymous' => $request->has('is_anonymous')
+        ]);
+
+        return redirect()->back()->with('success', 'Your comment has been posted!');
     }
 }

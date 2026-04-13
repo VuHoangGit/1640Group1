@@ -91,6 +91,12 @@ Route::middleware('auth')->group(function () {
         // Bấm Like / Dislike
         Route::post('/react-idea/{id}', [StaffController::class, 'react'])->name('staff.reactIdea');
 
+         // Gửi Comment
+        Route::post('/ideas/{ideaId}/comment', [StaffController::class, 'storeComment'])->name('comment.store');
+
+        // Đếm View
+        Route::post('/increment-view/{ideaId}', [StaffController::class, 'incrementView'])->name('staff.incrementView');
+
         // Thiết lập câu hỏi bảo mật
         Route::get('/authSetup', [StaffController::class, 'authSetup'])->name('staff.authSetup');
         Route::post('/authSetup', [StaffController::class, 'authQuestionSetup'])->name('createAuthAnswer');
